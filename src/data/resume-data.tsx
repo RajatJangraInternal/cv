@@ -1,7 +1,7 @@
 import type { ResumeData } from "@/lib/types";
 
 export const RESUME_DATA: ResumeData = {
-  name: "Bartosz Jarocki",
+  name: "Rajat Kumar",
   initials: "BJ",
   location: "Wrocław, Poland, CET",
   locationLink: "https://www.google.com/maps/place/Wrocław",
@@ -38,10 +38,10 @@ export const RESUME_DATA: ResumeData = {
   },
   education: [
     {
-      school: "Wrocław University of Technology",
-      degree: "Bachelor's Degree in Control systems engineering and Robotics",
-      start: "2007",
-      end: "2010",
+      school: "MDU",
+      degree: "Bachelor's Degree in Computer Science Engineering",
+      start: "2020",
+      end: "2024",
     },
   ],
   work: [

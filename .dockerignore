@@ -1,0 +1,7 @@
+node_modules
+.next
+out
+coverage
+Dockerfile
+docker-compose.yml
+*.log

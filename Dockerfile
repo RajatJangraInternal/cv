@@ -1,30 +1,45 @@
-FROM node:22.2.0-slim as BUILD_STAGE
+# Use official Node.js image as the base (non-alpine for builder)
+FROM node:20 AS builder
 
+# Set working directory
+WORKDIR /app
+
+# Copy package and lock files
+COPY package.json pnpm-lock.yaml ./
+
+# Install pnpm
+RUN npm install -g pnpm
+
+# Install dependencies
+RUN pnpm install --frozen-lockfile
+
+# Copy the rest of the application code
+COPY . .
+
+# Build the Next.js app
+RUN pnpm build
+
+# Production image, copy built assets from builder
+FROM node:20-alpine AS runner
 WORKDIR /app
 
 # Install pnpm
-RUN npm install -g pnpm@8
+RUN npm install -g pnpm
 
-COPY package.json pnpm-lock.yaml ./
+# Copy only necessary files for production
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-lock.yaml ./
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/tsconfig.json ./
+COPY --from=builder /app/src ./src
 
-RUN pnpm install --frozen-lockfile
+# Install only production dependencies
+RUN pnpm install --prod --frozen-lockfile
 
-COPY . .
-
-RUN pnpm build
-
-FROM node:alpine
-
-WORKDIR /app
-
-# Install pnpm in production stage
-RUN npm install -g pnpm@8
-
-COPY --from=BUILD_STAGE /app/package.json ./package.json
-COPY --from=BUILD_STAGE /app/node_modules ./node_modules
-COPY --from=BUILD_STAGE /app/.next ./.next
-COPY --from=BUILD_STAGE /app/public ./public
-
+# Expose port 3000
 EXPOSE 3000
 
+# Start the Next.js app
 CMD ["pnpm", "start"]

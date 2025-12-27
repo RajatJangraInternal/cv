@@ -207,7 +207,7 @@ export const RESUME_DATA: ResumeData = {
     "Linux",
     "Kubernetes",
   ],
-  projects: [
+  //projects: [
     // {
     //   title: "Monito",
     //   techStack: ["TypeScript", "Next.js", "Browser Extension", "PostgreSQL"],
@@ -247,5 +247,5 @@ export const RESUME_DATA: ResumeData = {
     //     href: "https://github.com/BartoszJarocki/cv",
     //   },
     // },
-  ],
+  //],
 } as const;

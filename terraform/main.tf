@@ -21,13 +21,23 @@ resource "aws_internet_gateway" "cv_igw" {
   }
 }
 
-resource "aws_subnet" "cv_subnet" {
+resource "aws_subnet" "cv_subnet_a" {
   vpc_id                  = aws_vpc.cv_vpc.id
   cidr_block              = "10.0.1.0/24"
   map_public_ip_on_launch = true
   availability_zone       = "us-east-1a"
   tags = {
-    Name = "cv-subnet"
+    Name = "cv-subnet-a"
+  }
+}
+
+resource "aws_subnet" "cv_subnet_b" {
+  vpc_id                  = aws_vpc.cv_vpc.id
+  cidr_block              = "10.0.2.0/24"
+  map_public_ip_on_launch = true
+  availability_zone       = "us-east-1b"
+  tags = {
+    Name = "cv-subnet-b"
   }
 }
 
@@ -42,8 +52,13 @@ resource "aws_route_table" "cv_route_table" {
   }
 }
 
-resource "aws_route_table_association" "cv_route_table_assoc" {
-  subnet_id      = aws_subnet.cv_subnet.id
+resource "aws_route_table_association" "cv_route_table_assoc_a" {
+  subnet_id      = aws_subnet.cv_subnet_a.id
+  route_table_id = aws_route_table.cv_route_table.id
+}
+
+resource "aws_route_table_association" "cv_route_table_assoc_b" {
+  subnet_id      = aws_subnet.cv_subnet_b.id
   route_table_id = aws_route_table.cv_route_table.id
 }
 
@@ -93,7 +108,7 @@ resource "aws_lb" "cv_alb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = [aws_subnet.cv_subnet.id]
+  subnets            = [aws_subnet.cv_subnet_a.id, aws_subnet.cv_subnet_b.id]
   enable_deletion_protection = false
   tags = {
     Name = "cv-alb"
@@ -200,17 +215,16 @@ resource "aws_ecs_service" "cv_service" {
   desired_count   = 1
   launch_type     = "FARGATE"
 
-
   network_configuration {
-    subnets         = [aws_subnet.cv_subnet.id]
+    subnets         = [aws_subnet.cv_subnet_a.id, aws_subnet.cv_subnet_b.id]
     security_groups = [aws_security_group.cv_sg.id]
   }
 
-	load_balancer {
-		target_group_arn = aws_lb_target_group.cv_tg.arn
-		container_name   = "cv-nextjs-app"
-		container_port   = 80
-	}
+  load_balancer {
+    target_group_arn = aws_lb_target_group.cv_tg.arn
+    container_name   = "cv-nextjs-app"
+    container_port   = 80
+  }
 
   lifecycle {
     ignore_changes = [task_definition]

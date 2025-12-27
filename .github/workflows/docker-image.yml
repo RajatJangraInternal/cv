@@ -1,13 +1,7 @@
 on:
 
-name: Build and Push Docker Image
-# Disabled: now handled by build-push-deploy.yml
-
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
+## Workflow disabled: now handled by build-push-deploy.yml
+# on:
         uses: actions/checkout@v4
 
       - name: Set up QEMU

@@ -1,3 +1,10 @@
+terraform {
+  backend "s3" {
+    bucket = "cv-terraform-state-rajatjangra"
+    key    = "terraform.tfstate"
+    region = "us-east-1"
+  }
+}
 resource "aws_security_group" "alb_sg" {
   name        = "cv-alb-sg"
   description = "Allow HTTP access to ALB"

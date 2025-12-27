@@ -5,12 +5,16 @@ export const RESUME_DATA: ResumeData = {
   initials: "RJ",
   location: "Bahadurgarh, India, IST",
   locationLink: "https://www.google.com/maps/place/Bahadurgarh,+India/",
-  about: "Full Stack Engineer dedicated to building high-quality products.",
+  about: "Cloud Consultant dedicated to delivering high-quality services.",
   summary: (
     <>
-      Full Stack Engineer specializing in high-performance React applications,
-      scalable Node.js services, and real-time collaboration systems.
-      Experienced in technical architecture design and remote team leadership.
+      Motivated and detail-oriented Cloud Consultant with proven expertise in
+      designing, deploying, and automating Microsoft Azure infrastructure.
+      Skilled in M365 administration, Entra ID, security, licensing, and
+      Privileged Identity Management (PIM). Strong experience in Infrastructure
+      as Code (IaC), automation, and DevOps using Bash, PowerShell, Docker,
+      Kubernetes, and Jenkins. Recognized for building scalable, secure, and
+      efficient solutions, while enabling seamless collaboration across teams.
     </>
   ),
   avatarUrl: "https://avatars.githubusercontent.com/u/162875200?v=4",

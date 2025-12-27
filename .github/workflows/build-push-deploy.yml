@@ -48,6 +48,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./terraform
+
       - name: Import existing IAM role if present
         run: |
           set +e
@@ -61,10 +65,6 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: us-east-1
-
-      - name: Terraform Init
-        run: terraform init
-        working-directory: ./terraform
 
       - name: Terraform Plan
         run: terraform plan

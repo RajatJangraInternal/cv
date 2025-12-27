@@ -217,13 +217,9 @@ resource "aws_ecs_service" "cv_service" {
   }
 }
 
+
 output "alb_dns_name" {
   value = aws_lb.cv_alb.dns_name
-}
-
-  lifecycle {
-    ignore_changes = [task_definition]
-  }
 }
 
 output "ecs_cluster_name" {

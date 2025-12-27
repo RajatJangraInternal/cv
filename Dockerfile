@@ -38,8 +38,10 @@ COPY --from=builder /app/src ./src
 # Install only production dependencies
 RUN pnpm install --prod --frozen-lockfile
 
-# Expose port 3000
-EXPOSE 3000
 
-# Start the Next.js app
+# Expose port 80 for ECS
+EXPOSE 80
+
+# Start the Next.js app on port 80
+ENV PORT=80
 CMD ["pnpm", "start"]

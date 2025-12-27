@@ -20,14 +20,14 @@ jobs:
         run: |
           # List of app source folders/files to watch
           set +e
-          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^(src/app/|public/|package.json|next.config.js|tsconfig.json)')
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^(src/app/|public/|package.json|next.config.js|tsconfig.json|Dockerfile)')
           set -e
           if [ -z "$CHANGED" ]; then
-            echo "No app changes detected."
-            echo "app_changed=false" >> $GITHUB_OUTPUT
+          echo "No app changes detected."
+          echo "app_changed=false" >> $GITHUB_OUTPUT
           else
-            echo "App changes detected."
-            echo "app_changed=true" >> $GITHUB_OUTPUT
+          echo "App changes detected."
+          echo "app_changed=true" >> $GITHUB_OUTPUT
           fi
 
   build-and-push:
@@ -130,6 +130,10 @@ jobs:
       - name: Show ECS Service Public IP
         run: |
           export TASK_ARN=$(aws ecs list-tasks --cluster cv-nextjs-cluster --service-name cv-nextjs-service --query "taskArns[0]" --output text)
+          if [ -z "$TASK_ARN" ] || [ "$TASK_ARN" = "None" ]; then
+            echo "No running ECS task found. App may not be running yet."
+            exit 0
+          fi
           export ENI_ID=$(aws ecs describe-tasks --cluster cv-nextjs-cluster --tasks $TASK_ARN --query "tasks[0].attachments[0].details[?name=='networkInterfaceId'].value" --output text)
           export PUBLIC_IP=$(aws ec2 describe-network-interfaces --network-interface-ids $ENI_ID --query "NetworkInterfaces[0].Association.PublicIp" --output text)
           echo "App Public IP: $PUBLIC_IP"

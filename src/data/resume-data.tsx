@@ -18,7 +18,7 @@ export const RESUME_DATA: ResumeData = {
     </>
   ),
   avatarUrl: "https://avatars.githubusercontent.com/u/162875200?v=4",
-  // personalWebsiteUrl: "https://rajat.cloud",
+  personalWebsiteUrl: "https://rajat.cloud",
   contact: {
     email: "contact@rajat.cloud",
     tel: "+917419523719",

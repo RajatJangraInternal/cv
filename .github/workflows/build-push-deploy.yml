@@ -6,24 +6,42 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  check-app-changes:
     runs-on: ubuntu-latest
+    outputs:
+      app_changed: ${{ steps.filter.outputs.app_changed }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+      - name: Check for app source changes
+        id: filter
+        run: |
+          # List of app source folders/files to watch
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^(src/|public/|package.json|next.config.js|tsconfig.json)')
+          if [ -z "$CHANGED" ]; then
+            echo "No app changes detected."
+            echo "app_changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "App changes detected."
+            echo "app_changed=true" >> $GITHUB_OUTPUT
+          fi
 
+  build-and-push:
+    runs-on: ubuntu-latest
+    needs: check-app-changes
+    if: needs.check-app-changes.outputs.app_changed == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
       - name: Log in to DockerHub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -33,7 +51,8 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build-and-push
+    needs: [check-app-changes, build-and-push]
+    if: needs.check-app-changes.outputs.app_changed == 'false' || always()
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -48,16 +67,18 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
-      - name: Terraform Destroy Subnet (cleanup)
+      - name: Cleanup orphaned network interfaces (ENIs)
         run: |
-          terraform destroy -target=aws_subnet.cv_subnet -auto-approve || true
-        working-directory: ./terraform
-
-      - name: Terraform Destroy VPC (cleanup)
-        run: |
-          terraform destroy -target=aws_vpc.cv_vpc -auto-approve || true
-        working-directory: ./terraform
-
+          ENIS=$(aws ec2 describe-network-interfaces --filters Name=description,Values="cv-nextjs*" --query 'NetworkInterfaces[?Status==`available`].NetworkInterfaceId' --output text)
+          for eni in $ENIS; do
+            echo "Deleting ENI: $eni"
+            aws ec2 delete-network-interface --network-interface-id $eni || true
+          done
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+          
       - name: Terraform Init
         run: terraform init
         working-directory: ./terraform

@@ -207,7 +207,7 @@ export const RESUME_DATA: ResumeData = {
     "Linux",
     "Kubernetes",
   ],
-  projects: [
+  //projects: [
     // {
     //   title: "Monito",
     //   techStack: ["TypeScript", "Next.js", "Browser Extension", "PostgreSQL"],

@@ -67,9 +67,18 @@ resource "aws_security_group" "cv_sg" {
   description = "Allow HTTP access on port 3000"
   vpc_id      = aws_vpc.cv_vpc.id
 
+
   ingress {
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    security_groups = [aws_security_group.alb_sg.id]
+  }
+
+  # Allow HTTPS from ALB SG
+  ingress {
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     security_groups = [aws_security_group.alb_sg.id]
   }
@@ -91,9 +100,18 @@ resource "aws_security_group" "alb_sg" {
   description = "Allow HTTP access to ALB"
   vpc_id      = aws_vpc.cv_vpc.id
 
+
   ingress {
     from_port   = 80
     to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Allow HTTPS from anywhere
+  ingress {
+    from_port   = 443
+    to_port     = 443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }

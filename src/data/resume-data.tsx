@@ -58,7 +58,7 @@ export const RESUME_DATA: ResumeData = {
     {
       company: "Spektra Systems LLC",
       link: "https://spektrasystems.com/",
-      badges: ["Remote", "AI", "React", "Next.js", "TypeScript", "AdonisJS"],
+      badges: ["Remote", "AI", "Powershell", "Azure", "Docker", "ARM Templates"],
       title: "Cloud Consultant",
       start: "2024",
       end: null,

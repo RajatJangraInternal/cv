@@ -187,11 +187,7 @@ export const RESUME_DATA: ResumeData = {
     "Bash",
     "Docker",
     "Terraform",
-    "Node.js",
-    "GraphQL",
-    "Relay",
-    "System Architecture",
-    "Remote Team Leadership",
+    "Kubernetes",
   ],
   projects: [
     {

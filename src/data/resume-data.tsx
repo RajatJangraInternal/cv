@@ -2,7 +2,7 @@ import type { ResumeData } from "@/lib/types";
 
 export const RESUME_DATA: ResumeData = {
   name: "Rajat Kumar",
-  initials: "BJ",
+  initials: "RJ",
   location: "Bahadurgarh, India, IST",
   locationLink: "https://www.google.com/maps/place/Bahadurgarh,+India/",
   about: "Full Stack Engineer dedicated to building high-quality products.",
@@ -13,8 +13,8 @@ export const RESUME_DATA: ResumeData = {
       Experienced in technical architecture design and remote team leadership.
     </>
   ),
-  avatarUrl: "https://avatars.githubusercontent.com/u/1017620?v=4",
-  personalWebsiteUrl: "https://jarocki.me",
+  avatarUrl: "https://avatars.githubusercontent.com/u/162875200?v=4",
+  personalWebsiteUrl: "https://rajat.cloud",
   contact: {
     email: "contact@rajat.cloud",
     tel: "+917419523719",
@@ -26,14 +26,14 @@ export const RESUME_DATA: ResumeData = {
       },
       {
         name: "LinkedIn",
-        url: "https://www.linkedin.com/in/bjarocki/",
+        url: "https://linkedin.com/in/rajat-kumar-8839b5262",
         icon: "linkedin",
       },
-      {
-        name: "X",
-        url: "https://x.com/BartoszJarocki",
-        icon: "x",
-      },
+      // {
+      //   name: "X",
+      //   url: "https://x.com/BartoszJarocki",
+      //   icon: "x",
+      // },
     ],
   },
   education: [
@@ -181,12 +181,12 @@ export const RESUME_DATA: ResumeData = {
     },
   ],
   skills: [
-    "React/Next.js/Remix",
-    "TypeScript",
-    "Tailwind CSS",
-    "Design Systems",
-    "WebRTC",
-    "WebSockets",
+    "Azure",
+    "Python",
+    "Powershell",
+    "Bash",
+    "Docker",
+    "Terraform",
     "Node.js",
     "GraphQL",
     "Relay",

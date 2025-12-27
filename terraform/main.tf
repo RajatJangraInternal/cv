@@ -206,11 +206,17 @@ resource "aws_ecs_service" "cv_service" {
     security_groups = [aws_security_group.cv_sg.id]
   }
 
-  load_balancer {
-    target_group_arn = aws_lb_target_group.cv_tg.arn
-    container_name   = "cv-nextjs-app"
-    container_port   = 80
+	load_balancer {
+		target_group_arn = aws_lb_target_group.cv_tg.arn
+		container_name   = "cv-nextjs-app"
+		container_port   = 80
+	}
+
+  lifecycle {
+    ignore_changes = [task_definition]
   }
+}
+
 output "alb_dns_name" {
   value = aws_lb.cv_alb.dns_name
 }

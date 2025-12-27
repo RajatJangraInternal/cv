@@ -20,7 +20,7 @@ jobs:
         run: |
           # List of app source folders/files to watch
           set +e
-          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^(src/app/|public/|package.json|next.config.js|tsconfig.json|Dockerfile)')
+          CHANGED=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep -E '^(src/|public/|package.json|next.config.js|tsconfig.json|Dockerfile)')
           set -e
           if [ -z "$CHANGED" ]; then
           echo "No app changes detected."

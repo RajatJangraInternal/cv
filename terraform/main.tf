@@ -123,6 +123,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role_policy" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+resource "aws_ecs_service" "cv_service" {
   name            = "cv-nextjs-service"
   cluster         = aws_ecs_cluster.cv_cluster.id
   task_definition = aws_ecs_task_definition.cv_task.arn

@@ -127,6 +127,14 @@ jobs:
         run: terraform apply -auto-approve
         working-directory: ./terraform
 
+      - name: Force new ECS deployment (pull latest image)
+        run: |
+          aws ecs update-service --cluster cv-nextjs-cluster --service cv-nextjs-service --force-new-deployment
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: us-east-1
+
       - name: Show ECS Service Public IP
         run: |
           export TASK_ARN=$(aws ecs list-tasks --cluster cv-nextjs-cluster --service-name cv-nextjs-service --query "taskArns[0]" --output text)

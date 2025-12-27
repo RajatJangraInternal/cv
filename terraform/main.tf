@@ -46,8 +46,8 @@ resource "aws_security_group" "cv_sg" {
   vpc_id      = aws_vpc.cv_vpc.id
 
   ingress {
-    from_port   = 3000
-    to_port     = 3000
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -95,7 +95,7 @@ resource "aws_ecs_task_definition" "cv_task" {
       portMappings = [
         {
           containerPort = 3000
-          hostPort      = 3000
+          hostPort      = 80
         }
       ]
     }
@@ -103,6 +103,10 @@ resource "aws_ecs_task_definition" "cv_task" {
 }
 
 resource "aws_iam_role" "ecs_task_execution_role" {
+    lifecycle {
+      prevent_destroy = true
+      ignore_changes = [name]
+    }
   name = "ecsTaskExecutionRole"
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

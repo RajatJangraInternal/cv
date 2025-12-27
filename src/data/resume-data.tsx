@@ -3,8 +3,8 @@ import type { ResumeData } from "@/lib/types";
 export const RESUME_DATA: ResumeData = {
   name: "Rajat Kumar",
   initials: "BJ",
-  location: "Wrocław, Poland, CET",
-  locationLink: "https://www.google.com/maps/place/Wrocław",
+  location: "Bahadurgarh, India, IST",
+  locationLink: "https://www.google.com/maps/place/Bahadurgarh,+India/",
   about: "Full Stack Engineer dedicated to building high-quality products.",
   summary: (
     <>
@@ -16,12 +16,12 @@ export const RESUME_DATA: ResumeData = {
   avatarUrl: "https://avatars.githubusercontent.com/u/1017620?v=4",
   personalWebsiteUrl: "https://jarocki.me",
   contact: {
-    email: "bartosz.jarocki@hey.com",
-    tel: "+48530213401",
+    email: "contact@rajat.cloud",
+    tel: "+917419523719",
     social: [
       {
         name: "GitHub",
-        url: "https://github.com/BartoszJarocki",
+        url: "https://github.com/RajatJangra2653",
         icon: "github",
       },
       {

@@ -70,6 +70,11 @@ jobs:
         run: terraform plan
         working-directory: ./terraform
 
+      - name: Terraform Destroy VPC (cleanup)
+        run: |
+          terraform destroy -target=aws_vpc.cv_vpc -auto-approve || true
+        working-directory: ./terraform
+
       - name: Terraform Apply
         run: terraform apply -auto-approve
         working-directory: ./terraform

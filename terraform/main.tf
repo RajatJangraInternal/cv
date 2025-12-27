@@ -218,6 +218,7 @@ resource "aws_ecs_service" "cv_service" {
   network_configuration {
     subnets         = [aws_subnet.cv_subnet_a.id, aws_subnet.cv_subnet_b.id]
     security_groups = [aws_security_group.cv_sg.id]
+    assign_public_ip = true
   }
 
   load_balancer {

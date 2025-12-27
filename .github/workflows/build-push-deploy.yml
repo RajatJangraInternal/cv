@@ -48,6 +48,16 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      - name: Terraform Destroy Subnet (cleanup)
+        run: |
+          terraform destroy -target=aws_subnet.cv_subnet -auto-approve || true
+        working-directory: ./terraform
+
+      - name: Terraform Destroy VPC (cleanup)
+        run: |
+          terraform destroy -target=aws_vpc.cv_vpc -auto-approve || true
+        working-directory: ./terraform
+
       - name: Terraform Init
         run: terraform init
         working-directory: ./terraform
@@ -68,11 +78,6 @@ jobs:
 
       - name: Terraform Plan
         run: terraform plan
-        working-directory: ./terraform
-
-      - name: Terraform Destroy VPC (cleanup)
-        run: |
-          terraform destroy -target=aws_vpc.cv_vpc -auto-approve || true
         working-directory: ./terraform
 
       - name: Terraform Apply

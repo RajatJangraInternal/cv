@@ -3,7 +3,7 @@ import type { ResumeData } from "@/lib/types";
 export const RESUME_DATA: ResumeData = {
   name: "Rajat Kumar",
   initials: "RJ",
-  location: "Bahadurgar, India, IST",
+  location: "Bahadurgarh, India, IST",
   locationLink: "https://www.google.com/maps/place/Bahadurgarh,+India/",
   about: "Cloud Consultant dedicated to delivering high-quality services.",
   summary: (

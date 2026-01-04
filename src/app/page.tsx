@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Badge } from "@/components/ui/badge";
+import { badgeVariants } from "@/components/ui/badge";
 import { CommandMenu } from "@/components/command-menu";
 import { SectionErrorBoundary } from "@/components/section-error-boundary";
 import { SectionSkeleton } from "@/components/section-skeleton";
 import { RESUME_DATA } from "@/data/resume-data";
 import { generateResumeStructuredData } from "@/lib/structured-data";
+import { cn } from "@/lib/utils";
 import { Education } from "./components/Education";
 import { Header } from "./components/Header";
 import { Projects } from "./components/Projects";
@@ -128,9 +129,9 @@ export default function ResumePage() {
         </nav>
         {/* Blog navigation link */}
         <div className="mx-auto mt-8 max-w-2xl text-center">
-          <Badge asChild>
-            <a href="/blog">Visit My Blog</a>
-          </Badge>
+          <a href="/blog" className={cn(badgeVariants())}>
+            Visit My Blog
+          </a>
         </div>
       </main>
     </>

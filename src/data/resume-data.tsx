@@ -30,7 +30,7 @@ export const RESUME_DATA: ResumeData = {
       },
       {
         name: "LinkedIn",
-        url: "https://linkedin.com/in/rajat-kumar-8839b5262",
+        url: "https://linkedin.com/in/rajat-cloud",
         icon: "linkedin",
       },
       // {

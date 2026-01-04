@@ -1,20 +1,39 @@
 import Link from "next/link";
+import fs from "fs";
+import path from "path";
 
-// Dummy blog posts data
-const posts = [
-  {
-    slug: "first-post",
-    title: "First Blog Post",
-    summary: "This is the summary of the first post.",
-  },
-  {
-    slug: "second-post",
-    title: "Second Blog Post",
-    summary: "This is the summary of the second post.",
-  },
-];
+interface PostData {
+  title: string;
+  summary: string;
+  content: string;
+}
+
+interface Post extends PostData {
+  slug: string;
+}
+
+function getPosts(): Post[] {
+  const postsDir = path.join(process.cwd(), "src/app/blog/posts");
+  const files = fs.readdirSync(postsDir);
+
+  return files
+    .filter((file) => file.endsWith(".json"))
+    .map((file) => {
+      const slug = file.replace(/\.json$/, "");
+      const postPath = path.join(postsDir, file);
+      const fileContent = fs.readFileSync(postPath, "utf-8");
+      const postData: PostData = JSON.parse(fileContent);
+
+      return {
+        slug,
+        ...postData,
+      };
+    });
+}
 
 export default function BlogPage() {
+  const posts = getPosts();
+
   return (
     <main className="max-w-2xl mx-auto py-8 px-4">
       <h1 className="text-3xl font-bold mb-6">Blog</h1>

@@ -46,13 +46,14 @@ export const RESUME_DATA: ResumeData = {
       degree: "Bachelor's Degree in Computer Science Engineering",
       start: "2020",
       end: "2024",
-    },
-    {
-      school: "S.R. Century School, Bahadurgarh",
-      degree: "Senior Secondary (12th)",
-      start: "2019",
-      end: "2020",
-    },
+    }
+    //,
+    // {
+    //   school: "S.R. Century School, Bahadurgarh",
+    //   degree: "Senior Secondary (12th)",
+    //   start: "2019",
+    //   end: "2020",
+    // },
   ],
   work: [
     {

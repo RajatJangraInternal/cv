@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { Badge } from "@/components/ui/badge";
 import { CommandMenu } from "@/components/command-menu";
 import { SectionErrorBoundary } from "@/components/section-error-boundary";
 import { SectionSkeleton } from "@/components/section-skeleton";
@@ -127,12 +128,9 @@ export default function ResumePage() {
         </nav>
         {/* Blog navigation link */}
         <div className="mx-auto mt-8 max-w-2xl text-center">
-          <a
-            href="/blog"
-            className="inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition-colors"
-          >
-            Visit the Blog
-          </a>
+          <Badge asChild>
+            <a href="/blog">Visit My Blog</a>
+          </Badge>
         </div>
       </main>
     </>

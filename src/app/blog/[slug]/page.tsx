@@ -24,10 +24,10 @@ export default function BlogPostPage({ params }: { params: { slug: string } }) {
   const post = getPost(params.slug);
   if (!post) return notFound();
   return (
-    <main className="max-w-2xl mx-auto py-8 px-4">
+    <main className="max-w-2xl mx-auto py-8 px-4 font-mono">
       <h1 className="text-3xl font-bold mb-4">{post.title}</h1>
       <article
-        className="prose"
+        className="prose font-mono"
         dangerouslySetInnerHTML={{
           __html: post.content.replace(/\n/g, "<br/>"),
         }}

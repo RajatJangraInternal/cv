@@ -35,7 +35,7 @@ export default function BlogPage() {
   const posts = getPosts();
 
   return (
-    <main className="max-w-2xl mx-auto py-8 px-4">
+    <main className="max-w-2xl mx-auto py-8 px-4 font-mono">
       <h1 className="text-3xl font-bold mb-6">Blog</h1>
       <ul className="space-y-6">
         {posts.map((post) => (

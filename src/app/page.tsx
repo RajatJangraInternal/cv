@@ -125,6 +125,15 @@ export default function ResumePage() {
         <nav className="print:hidden" aria-label="Quick navigation">
           <CommandMenu links={getCommandMenuLinks()} />
         </nav>
+        {/* Blog navigation link */}
+        <div className="mx-auto mt-8 max-w-2xl text-center">
+          <a
+            href="/blog"
+            className="inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 transition-colors"
+          >
+            Visit the Blog
+          </a>
+        </div>
       </main>
     </>
   );

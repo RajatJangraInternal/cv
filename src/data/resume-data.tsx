@@ -5,16 +5,18 @@ export const RESUME_DATA: ResumeData = {
   initials: "RJ",
   location: "Bahadurgarh, India, IST",
   locationLink: "https://www.google.com/maps/place/Bahadurgarh,+India/",
-  about: "Cloud Consultant dedicated to delivering high-quality services.",
+  about: "Cloud Consultant focused on building secure, automated, and scalable Azure-centric cloud platforms that deliver reliable, high-performance services at enterprise scale.",
   summary: (
     <>
-      Motivated and detail-oriented Cloud Consultant with proven expertise in
-      designing, deploying, and automating Microsoft Azure infrastructure.
-      Skilled in M365 administration, Entra ID, security, licensing, and
-      Privileged Identity Management (PIM). Strong experience in Infrastructure
-      as Code (IaC), automation, and DevOps using Bash, PowerShell, Docker,
-      Kubernetes, and Jenkins. Recognized for building scalable, secure, and
-      efficient solutions, while enabling seamless collaboration across teams.
+      Cloud Consultant with hands-on experience designing, automating, and
+      operating cloud-native platforms across Microsoft Azure and AWS.
+      Specialized in Infrastructure as Code, CI/CD automation, and large-scale
+      cloud operations supporting thousands of users globally. Proven track
+      record in building secure, scalable lab environments, automating tenant
+      onboarding, optimizing cloud costs, and resolving mission-critical
+      production incidents. Passionate about delivering reliable,
+      high-performance cloud solutions through strong engineering, automation,
+      and opera tional excellence.
     </>
   ),
   avatarUrl: "https://avatars.githubusercontent.com/u/162875200?v=4",
@@ -46,7 +48,7 @@ export const RESUME_DATA: ResumeData = {
       degree: "Bachelor's Degree in Computer Science Engineering",
       start: "2020",
       end: "2024",
-    }
+    },
     //,
     // {
     //   school: "S.R. Century School, Bahadurgarh",

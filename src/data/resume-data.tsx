@@ -16,7 +16,7 @@ export const RESUME_DATA: ResumeData = {
       onboarding, optimizing cloud costs, and resolving mission-critical
       production incidents. Passionate about delivering reliable,
       high-performance cloud solutions through strong engineering, automation,
-      and opera tional excellence.
+      and operational excellence.
     </>
   ),
   avatarUrl: "https://avatars.githubusercontent.com/u/162875200?v=4",

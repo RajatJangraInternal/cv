@@ -1,7 +1,7 @@
 import type { ResumeData } from "@/lib/types";
 
 export const RESUME_DATA: ResumeData = {
-  name: "Test",
+  name: "Rajat Kumar",
   initials: "RJ",
   location: "Bahadurgarh, India, IST",
   locationLink: "https://www.google.com/maps/place/Bahadurgarh,+India/",

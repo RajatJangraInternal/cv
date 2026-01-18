@@ -1,4 +1,3 @@
-
 import React from "react";
 import { RESUME_DATA } from "@/data/resume-data";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -12,7 +11,11 @@ export default function Certifications() {
       <h2 className="text-xl font-bold" id="certifications-section">
         Certifications
       </h2>
-      <div className="space-y-4 print:space-y-0" role="feed" aria-labelledby="certifications-section">
+      <div
+        className="space-y-4 print:space-y-0"
+        role="feed"
+        aria-labelledby="certifications-section"
+      >
         {certifications.map((cert, idx) => (
           <Card key={idx} className="py-1 print:py-0">
             <CardHeader className="print:space-y-1">
@@ -27,7 +30,9 @@ export default function Certifications() {
             </CardHeader>
             <CardContent>
               <div className="text-pretty font-mono text-sm text-foreground/80 print:text-[12px]">
-                <span className="text-xs text-gray-500 mr-2">{cert.issuer}</span>
+                <span className="text-xs text-gray-500 mr-2">
+                  {cert.issuer}
+                </span>
                 <a
                   href={cert.credentialUrl}
                   target="_blank"

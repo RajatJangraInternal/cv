@@ -54,6 +54,20 @@ export const RESUME_DATA: ResumeData = {
     //   school: "S.R. Century School, Bahadurgarh",
     //   degree: "Senior Secondary (12th)",
     //   start: "2019",
+      certifications: [
+        {
+          name: "Microsoft Certified: Azure Solutions Architect Expert",
+          issuer: "Microsoft",
+          date: "2025",
+          credentialUrl: "https://www.credly.com/badges/azure-solutions-architect-expert",
+        },
+        {
+          name: "HashiCorp Certified: Terraform Associate",
+          issuer: "HashiCorp",
+          date: "2024",
+          credentialUrl: "https://www.credly.com/badges/terraform-associate",
+        },
+      ],
     //   end: "2020",
     // },
   ],

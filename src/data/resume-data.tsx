@@ -62,14 +62,14 @@ export const RESUME_DATA: ResumeData = {
     {
       name: "Microsoft Certified: Azure Solutions Architect Expert",
       issuer: "Microsoft",
-      date: "2025",
+      date: "2026",
       credentialUrl:
         "https://www.credly.com/badges/azure-solutions-architect-expert",
     },
     {
-      name: "HashiCorp Certified: Terraform Associate",
-      issuer: "HashiCorp",
-      date: "2024",
+      name: "Microsoft Certified: Terraform Associate",
+      issuer: "Microsoft",
+      date: "2026",
       credentialUrl: "https://www.credly.com/badges/terraform-associate",
     },
   ],

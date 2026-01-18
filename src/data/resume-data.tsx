@@ -5,7 +5,8 @@ export const RESUME_DATA: ResumeData = {
   initials: "RJ",
   location: "Bahadurgarh, India, IST",
   locationLink: "https://www.google.com/maps/place/Bahadurgarh,+India/",
-  about: "Cloud Consultant focused on building secure, automated, and scalable Azure-centric cloud platforms that deliver reliable, high-performance services at enterprise scale.",
+  about:
+    "Cloud Consultant focused on building secure, automated, and scalable Azure-centric cloud platforms that deliver reliable, high-performance services at enterprise scale.",
   summary: (
     <>
       Cloud Consultant with hands-on experience designing, automating, and
@@ -54,22 +55,23 @@ export const RESUME_DATA: ResumeData = {
     //   school: "S.R. Century School, Bahadurgarh",
     //   degree: "Senior Secondary (12th)",
     //   start: "2019",
-      certifications: [
-        {
-          name: "Microsoft Certified: Azure Solutions Architect Expert",
-          issuer: "Microsoft",
-          date: "2025",
-          credentialUrl: "https://www.credly.com/badges/azure-solutions-architect-expert",
-        },
-        {
-          name: "HashiCorp Certified: Terraform Associate",
-          issuer: "HashiCorp",
-          date: "2024",
-          credentialUrl: "https://www.credly.com/badges/terraform-associate",
-        },
-      ],
     //   end: "2020",
     // },
+  ],
+  certifications: [
+    {
+      name: "Microsoft Certified: Azure Solutions Architect Expert",
+      issuer: "Microsoft",
+      date: "2025",
+      credentialUrl:
+        "https://www.credly.com/badges/azure-solutions-architect-expert",
+    },
+    {
+      name: "HashiCorp Certified: Terraform Associate",
+      issuer: "HashiCorp",
+      date: "2024",
+      credentialUrl: "https://www.credly.com/badges/terraform-associate",
+    },
   ],
   work: [
     {

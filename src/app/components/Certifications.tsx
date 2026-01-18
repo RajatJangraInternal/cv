@@ -1,4 +1,3 @@
-
 import React from "react";
 import { RESUME_DATA } from "@/data/resume-data";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";

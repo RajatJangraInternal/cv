@@ -64,13 +64,14 @@ export const RESUME_DATA: ResumeData = {
       issuer: "Microsoft",
       date: "2026",
       credentialUrl:
-        "https://www.credly.com/badges/azure-solutions-architect-expert",
+        "https://learn.microsoft.com/api/credentials/share/en-in/RajatKumar2653/CF470145D8466660?sharingId=CEB12D732975539D",
     },
     {
-      name: "Microsoft Certified: Terraform Associate",
+      name: "Microsoft Certified: Azure Administrator Associate",
       issuer: "Microsoft",
       date: "2026",
-      credentialUrl: "https://www.credly.com/badges/terraform-associate",
+      credentialUrl:
+        "https://learn.microsoft.com/api/credentials/share/en-in/RajatKumar2653/81D6372F4AE8B508?sharingId=CEB12D732975539D",
     },
   ],
   work: [

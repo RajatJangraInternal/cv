@@ -45,7 +45,7 @@ export const RESUME_DATA: ResumeData = {
   },
   education: [
     {
-      school: "MDU",
+      school: "Maharshi Dayanand University",
       degree: "Bachelor's Degree in Computer Science Engineering",
       start: "2020",
       end: "2024",

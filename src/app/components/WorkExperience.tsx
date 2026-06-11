@@ -158,4 +158,11 @@ export function WorkExperience({
         aria-labelledby="work-experience"
       >
         {work.map((item) => (
-          <article key={`$
+          <article key={`${item.company}-${item.start}`}>
+            <WorkExperienceItem work={item} />
+          </article>
+        ))}
+      </div>
+    </Section>
+  );
+}

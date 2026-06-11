@@ -195,4 +195,23 @@ export function Header() {
         <ContactButtons
           contact={RESUME_DATA.contact}
           personalWebsiteUrl={RESUME_DATA.personalWebsiteUrl}
- 
+        />
+
+        <PrintContact
+          contact={RESUME_DATA.contact}
+          personalWebsiteUrl={RESUME_DATA.personalWebsiteUrl}
+        />
+      </div>
+
+      <div className="flex flex-col items-end gap-3">
+        <HeaderActions />
+        <Avatar
+          className="size-28"
+          src={RESUME_DATA.avatarUrl}
+          alt={`${RESUME_DATA.name}'s profile picture`}
+          fallback={RESUME_DATA.initials}
+        />
+      </div>
+    </header>
+  );
+}

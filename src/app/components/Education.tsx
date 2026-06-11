@@ -80,4 +80,10 @@ export function Education({ education }: EducationListProps) {
       >
         {education.map((item) => (
           <article key={item.school}>
-            <EducationItem e
+            <EducationItem education={item} />
+          </article>
+        ))}
+      </div>
+    </Section>
+  );
+}

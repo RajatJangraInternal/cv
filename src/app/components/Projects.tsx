@@ -154,4 +154,9 @@ export function Projects({
               tags={project.techStack}
               link={project.link?.href}
             />
-         
+          </article>
+        ))}
+      </div>
+    </Section>
+  );
+}

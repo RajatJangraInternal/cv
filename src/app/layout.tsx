@@ -92,4 +92,35 @@ const themeInitScript = `
 (function () {
   try {
     var stored = localStorage.getItem('theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var isDark = stored ? stored === 'dark' : prefersDark;
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+})();
+`;
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html
+      lang="en"
+      className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}
+      suppressHydrationWarning={true}
+    >
+      <head>
+        {/* Sets the theme before first paint to avoid a flash of the wrong color scheme. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body>
+        <ErrorBoundary>{children}</ErrorBoundary>
+        <Analytics />
+      </body>
+    </html>
+  );
+}
    

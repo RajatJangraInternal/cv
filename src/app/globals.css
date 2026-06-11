@@ -170,6 +170,81 @@
     background-clip: text;
     color: transparent;
   }
+
+  /* Numbered section index, terminal-style (// 01), right-aligned in h2 */
+  #main-content {
+    counter-reset: section;
+  }
+  #main-content h2 {
+    counter-increment: section;
+  }
+  #main-content h2::after {
+    content: "// 0" counter(section);
+    margin-left: auto;
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    color: hsl(var(--brand) / 0.65);
+  }
+
+  /* Scroll-reveal: hidden state only when JS is available (html.js) */
+  html.js .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+    transition:
+      opacity 0.7s ease,
+      transform 0.7s ease;
+  }
+  html.js .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Work-experience timeline: gradient spine + glowing node per entry */
+  .cv-timeline {
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  .cv-timeline::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.5rem;
+    bottom: 0.5rem;
+    width: 1px;
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--brand) / 0.7),
+      hsl(var(--brand-2) / 0.35),
+      transparent
+    );
+  }
+  .cv-timeline-item {
+    position: relative;
+  }
+  .cv-timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -1.5rem;
+    top: 1.35rem;
+    width: 0.55rem;
+    height: 0.55rem;
+    transform: translateX(-50%);
+    border-radius: 9999px;
+    background: hsl(var(--brand));
+    box-shadow:
+      0 0 0 3px hsl(var(--brand) / 0.18),
+      0 0 12px hsl(var(--brand) / 0.7);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html.js .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }
 
 .print-force-new-page {
@@ -191,9 +266,24 @@
   #main-content h2::before {
     background: #111 !important;
   }
+  #main-content h2::after {
+    content: none !important;
+  }
   .text-gradient {
     -webkit-text-fill-color: #111 !important;
     color: #111 !important;
+  }
+  html.js .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .cv-timeline {
+    padding-left: 0 !important;
+  }
+  .cv-timeline::before,
+  .cv-timeline-item::before {
+    content: none !important;
   }
   .no-print,
   .print\:hidden {

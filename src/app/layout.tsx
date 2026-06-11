@@ -91,6 +91,7 @@ export const viewport: Viewport = {
 const themeInitScript = `
 (function () {
   try {
+    document.documentElement.classList.add('js');
     var stored = localStorage.getItem('theme');
     var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     var isDark = stored ? stored === 'dark' : prefersDark;
@@ -116,7 +117,7 @@ export default function RootLayout({
         {/* Sets the theme before first paint to avoid a flash of the wrong color scheme. */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
-      <body>
+      <body className="cv-backdrop">
         <ErrorBoundary>{children}</ErrorBoundary>
         <Analytics />
       </body>

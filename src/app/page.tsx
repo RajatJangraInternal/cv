@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { badgeVariants } from "@/components/ui/badge";
 import { CommandMenu } from "@/components/command-menu";
+import { CursorGlow } from "@/components/cursor-glow";
+import { Reveal } from "@/components/reveal";
 import { SectionErrorBoundary } from "@/components/section-error-boundary";
 import { SectionSkeleton } from "@/components/section-skeleton";
 import { RESUME_DATA } from "@/data/resume-data";
@@ -88,51 +90,86 @@ export default function ResumePage() {
         </div>
 
         <section
-          className="mx-auto w-full max-w-2xl space-y-8 rounded-2xl border border-border/60 bg-card/60 p-6 shadow-sm backdrop-blur-sm print:space-y-4 print:border-0 print:bg-white print:p-0 print:shadow-none print:backdrop-blur-none sm:p-8"
+          className="mx-auto w-full max-w-3xl overflow-hidden rounded-2xl border border-border/60 bg-card/60 shadow-sm backdrop-blur-sm print:border-0 print:bg-white print:shadow-none print:backdrop-blur-none"
           aria-label="Resume Content"
         >
-          <SectionErrorBoundary sectionName="Header">
-            <Suspense fallback={<SectionSkeleton lines={4} />}>
-              <Header />
-            </Suspense>
-          </SectionErrorBoundary>
+          {/* Terminal window chrome */}
+          <div className="flex items-center gap-2 border-b border-border/60 bg-secondary/40 px-4 py-2.5 print:hidden">
+            <span className="flex gap-1.5" aria-hidden="true">
+              <span className="size-2.5 rounded-full bg-red-400/80" />
+              <span className="size-2.5 rounded-full bg-yellow-400/80" />
+              <span className="size-2.5 rounded-full bg-emerald-400/80" />
+            </span>
+            <span className="ml-2 truncate font-mono text-[11px] text-muted-foreground">
+              ~/rajat-kumar/resume — readonly
+            </span>
+            <span className="ml-auto inline-flex items-center gap-1.5 font-mono text-[11px] text-brand">
+              <span
+                className="size-1.5 animate-pulse rounded-full bg-brand"
+                aria-hidden="true"
+              />
+              live
+            </span>
+          </div>
 
-          <div className="space-y-8 print:space-y-4">
-            <SectionErrorBoundary sectionName="Summary">
-              <Suspense fallback={<SectionSkeleton lines={2} />}>
-                <Summary summary={RESUME_DATA.summary} />
-              </Suspense>
-            </SectionErrorBoundary>
-
-            <SectionErrorBoundary sectionName="Skills">
-              <Suspense fallback={<SectionSkeleton lines={2} />}>
-                <Skills skills={RESUME_DATA.skills} />
-              </Suspense>
-            </SectionErrorBoundary>
-
-            <SectionErrorBoundary sectionName="Work Experience">
-              <Suspense fallback={<SectionSkeleton lines={6} />}>
-                <WorkExperience work={RESUME_DATA.work} />
-              </Suspense>
-            </SectionErrorBoundary>
-
-            <SectionErrorBoundary sectionName="Certifications">
+          <div className="space-y-8 p-6 print:space-y-4 print:p-0 sm:p-8">
+            <SectionErrorBoundary sectionName="Header">
               <Suspense fallback={<SectionSkeleton lines={4} />}>
-                <Certifications certifications={RESUME_DATA.certifications} />
+                <Header />
               </Suspense>
             </SectionErrorBoundary>
 
-            <SectionErrorBoundary sectionName="Projects">
-              <Suspense fallback={<SectionSkeleton lines={5} />}>
-                <Projects projects={RESUME_DATA.projects} />
-              </Suspense>
-            </SectionErrorBoundary>
+            <div className="space-y-8 print:space-y-4">
+              <Reveal>
+                <SectionErrorBoundary sectionName="Summary">
+                  <Suspense fallback={<SectionSkeleton lines={2} />}>
+                    <Summary summary={RESUME_DATA.summary} />
+                  </Suspense>
+                </SectionErrorBoundary>
+              </Reveal>
 
-            <SectionErrorBoundary sectionName="Education">
-              <Suspense fallback={<SectionSkeleton lines={3} />}>
-                <Education education={RESUME_DATA.education} />
-              </Suspense>
-            </SectionErrorBoundary>
+              <Reveal delay={60}>
+                <SectionErrorBoundary sectionName="Skills">
+                  <Suspense fallback={<SectionSkeleton lines={2} />}>
+                    <Skills skills={RESUME_DATA.skills} />
+                  </Suspense>
+                </SectionErrorBoundary>
+              </Reveal>
+
+              <Reveal>
+                <SectionErrorBoundary sectionName="Work Experience">
+                  <Suspense fallback={<SectionSkeleton lines={6} />}>
+                    <WorkExperience work={RESUME_DATA.work} />
+                  </Suspense>
+                </SectionErrorBoundary>
+              </Reveal>
+
+              <Reveal>
+                <SectionErrorBoundary sectionName="Certifications">
+                  <Suspense fallback={<SectionSkeleton lines={4} />}>
+                    <Certifications
+                      certifications={RESUME_DATA.certifications}
+                    />
+                  </Suspense>
+                </SectionErrorBoundary>
+              </Reveal>
+
+              <Reveal>
+                <SectionErrorBoundary sectionName="Projects">
+                  <Suspense fallback={<SectionSkeleton lines={5} />}>
+                    <Projects projects={RESUME_DATA.projects} />
+                  </Suspense>
+                </SectionErrorBoundary>
+              </Reveal>
+
+              <Reveal>
+                <SectionErrorBoundary sectionName="Education">
+                  <Suspense fallback={<SectionSkeleton lines={3} />}>
+                    <Education education={RESUME_DATA.education} />
+                  </Suspense>
+                </SectionErrorBoundary>
+              </Reveal>
+            </div>
           </div>
         </section>
 
@@ -152,7 +189,33 @@ export default function ResumePage() {
             Read my blog →
           </a>
         </div>
+
+        {/* Footer */}
+        <footer className="mx-auto mt-14 max-w-3xl pb-8 text-center print:hidden">
+          <div
+            className="h-px bg-gradient-to-r from-transparent via-brand/40 to-transparent"
+            aria-hidden="true"
+          />
+          <div className="mt-6 flex flex-col items-center gap-2 font-mono text-xs text-muted-foreground">
+            <p className="font-bold tracking-tight text-brand">
+              &lt;{RESUME_DATA.initials} /&gt;
+            </p>
+            <p>
+              designed &amp; shipped from the terminal — Next.js · Tailwind ·
+              Vercel
+            </p>
+            <a
+              href="#top"
+              className="mt-1 transition-colors hover:text-brand"
+              aria-label="Back to top"
+            >
+              ↑ back to top
+            </a>
+          </div>
+        </footer>
       </main>
+
+      <CursorGlow />
     </>
   );
 }

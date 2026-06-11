@@ -315,6 +315,7 @@ function SystemStatus() {
 export function Hero() {
   return (
     <section
+      id="top"
       className="relative flex min-h-[100svh] flex-col overflow-hidden print:hidden"
       aria-label="Introduction"
     >

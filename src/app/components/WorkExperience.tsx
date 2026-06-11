@@ -153,12 +153,15 @@ export function WorkExperience({
         Work Experience
       </h2>
       <div
-        className="space-y-4 print:space-y-0"
+        className="cv-timeline space-y-4 print:space-y-0"
         role="feed"
         aria-labelledby="work-experience"
       >
         {work.map((item) => (
-          <article key={`${item.company}-${item.start}`}>
+          <article
+            key={`${item.company}-${item.start}`}
+            className="cv-timeline-item"
+          >
             <WorkExperienceItem work={item} />
           </article>
         ))}

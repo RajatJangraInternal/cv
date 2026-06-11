@@ -2,22 +2,20 @@ import type { ResumeData } from "@/lib/types";
 
 export const RESUME_DATA: ResumeData = {
   name: "Rajat Kumar",
-  initials: "RJ",
-  location: "Bahadurgarh, India, IST",
-  locationLink: "https://www.google.com/maps/place/Bahadurgarh,+India/",
+  initials: "RK",
+  location: "New Delhi, India, IST",
+  locationLink: "https://www.google.com/maps/place/New+Delhi,+India/",
   about:
-    "Cloud Consultant focused on building secure, automated, and scalable Azure-centric cloud platforms that deliver reliable, high-performance services at enterprise scale.",
+    "Cloud Consultant automating and operating secure, scalable Azure & AWS platforms at enterprise scale.",
   summary: (
     <>
       Cloud Consultant with hands-on experience designing, automating, and
       operating cloud-native platforms across Microsoft Azure and AWS.
       Specialized in Infrastructure as Code, CI/CD automation, and large-scale
       cloud operations supporting thousands of users globally. Proven track
-      record in building secure, scalable lab environments, automating tenant
+      record building secure, scalable lab environments, automating tenant
       onboarding, optimizing cloud costs, and resolving mission-critical
-      production incidents. Passionate about delivering reliable,
-      high-performance cloud solutions through strong engineering, automation,
-      and operational excellence.
+      production incidents.
     </>
   ),
   avatarUrl: "https://avatars.githubusercontent.com/u/162875200?v=4",
@@ -36,27 +34,90 @@ export const RESUME_DATA: ResumeData = {
         url: "https://linkedin.com/in/rajat-cloud",
         icon: "linkedin",
       },
-      // {
-      //   name: "X",
-      //   url: "https://x.com/BartoszJarocki",
-      //   icon: "x",
-      // },
     ],
   },
   education: [
     {
-      school: "Maharshi Dayanand University",
-      degree: "Bachelor's Degree in Computer Science Engineering",
+      school: "Maharshi Dayanand University, Rohtak",
+      degree: "B.Tech, Computer Science and Engineering - 80%",
       start: "2020",
       end: "2024",
     },
-    //,
-    // {
-    //   school: "S.R. Century School, Bahadurgarh",
-    //   degree: "Senior Secondary (12th)",
-    //   start: "2019",
-    //   end: "2020",
-    // },
+  ],
+  work: [
+    {
+      company: "Spektra Systems",
+      link: "https://spektrasystems.com/",
+      badges: ["Remote", "Azure", "AWS", "PowerShell", "Microsoft Graph"],
+      title: "Cloud Consultant",
+      start: "Aug 2025",
+      end: null,
+      description: (
+        <>
+          L2/L3 support and automation for SLA-based production workloads across
+          Azure and AWS.
+          <ul className="list-inside list-disc">
+            <li>
+              Migrated 60+ PowerShell scripts from deprecated Az modules to
+              Microsoft Graph, impacting 40,000+ production deployments
+            </li>
+            <li>
+              Delivered live support for 100+ cloud labs across Azure AI Foundry,
+              Azure DevOps, GitHub Actions, Semantic Kernel and API Management
+              with 100% customer satisfaction
+            </li>
+            <li>
+              Led a critical incident response, provisioning 2,500 licenses in
+              production within an hour to resolve a platform outage and protect
+              event delivery
+            </li>
+          </ul>
+        </>
+      ),
+    },
+    {
+      company: "Spektra Systems",
+      link: "https://spektrasystems.com/",
+      badges: ["Remote", "Terraform", "Bicep", "ARM", "IAM / RBAC"],
+      title: "Associate Cloud Consultant",
+      start: "Jul 2024",
+      end: "Jul 2025",
+      description: (
+        <>
+          Designed and automated secure, highly-available Azure lab platforms
+          using Infrastructure as Code.
+          <ul className="list-inside list-disc">
+            <li>
+              Built HA / disaster-recovery-ready environments with ARM
+              Templates, Terraform and Bicep
+            </li>
+            <li>
+              Automated onboarding of thousands of cloud tenants via PowerShell,
+              enabling centralized cost tracking and governance
+            </li>
+            <li>
+              Produced cost models for 50+ lab environments and powered 30+
+              global hackathons for 20+ enterprise clients
+            </li>
+          </ul>
+        </>
+      ),
+    },
+    {
+      company: "Spektra Systems",
+      link: "https://spektrasystems.com/",
+      badges: ["Remote", "Azure", "AWS", "Networking", "IAM"],
+      title: "Cloud Consultant Trainee",
+      start: "Mar 2024",
+      end: "Jun 2024",
+      description: (
+        <>
+          Deployed, administered and troubleshot cloud infrastructure across
+          Azure and AWS - virtual machines, networking, IAM and load balancers -
+          while building automation and deployment documentation.
+        </>
+      ),
+    },
   ],
   certifications: [
     {
@@ -109,198 +170,49 @@ export const RESUME_DATA: ResumeData = {
         "https://learn.microsoft.com/api/credentials/share/en-us/RajatKumar2653/4793B6BC612E7123?sharingId=CEB12D732975539D",
     },
   ],
-  work: [
-    {
-      company: "Spektra Systems",
-      link: "https://spektrasystems.com/",
-      badges: ["Remote", "Azure", "M365", "DevOps", "IaC"],
-      title: "Cloud Consultant",
-      start: "2024",
-      end: null,
-      description: (
-        <>
-          Working on secure, scalable Azure and Microsoft 365 cloud solutions,
-          enabling organizations to govern, automate, and optimize cloud
-          environments while accelerating enterprise cloud adoption and DevOps
-          practices.
-        </>
-      ),
-    },
-    // {
-    //   company: "Film.io",
-    //   link: "https://film.io",
-    //   badges: ["Remote", "React", "Next.js", "TypeScript", "Node.js"],
-    //   title: "Software Architect",
-    //   start: "2024",
-    //   end: "2025",
-    //   description: (
-    //     <>
-    //       Leading technical architecture of a blockchain-based film funding
-    //       platform.
-    //       <ul className="list-inside list-disc">
-    //         <li>
-    //           Architecting migration from CRA to Next.js for improved
-    //           performance, SEO, and DX
-    //         </li>
-    //         <li>
-    //           Established release process enabling faster deployments and
-    //           reliable rollbacks
-    //         </li>
-    //         <li>
-    //           Implementing system-wide monitoring and security improvements
-    //         </li>
-    //       </ul>
-    //     </>
-    //   ),
-    // },
-    // {
-    //   company: "Parabol",
-    //   link: "https://parabol.co",
-    //   badges: [
-    //     "Remote",
-    //     "React",
-    //     "TypeScript",
-    //     "Node.js",
-    //     "GraphQL",
-    //     "Tailwind CSS",
-    //   ],
-    //   title: "Senior Full Stack Developer",
-    //   start: "2021",
-    //   end: "2024",
-    //   description: (
-    //     <>
-    //       Senior developer and squad leader for an enterprise agile meeting
-    //       platform.
-    //       <ul className="list-inside list-disc">
-    //         <li>
-    //           Built design system with Tailwind CSS, improving development speed
-    //           and time to market
-    //         </li>
-    //         <li>
-    //           Implemented engineering practices: PR automation, code review
-    //           guidelines, and workflows
-    //         </li>
-    //         <li>
-    //           Open source contributions to Relay DevTools and React i18n tooling
-    //         </li>
-    //       </ul>
-    //     </>
-    //   ),
-    // },
-    // {
-    //   company: "Clevertech",
-    //   link: "https://clevertech.biz",
-    //   badges: ["Remote", "React", "TypeScript", "Node.js", "Android", "Kotlin"],
-    //   title: "Lead Android Developer → Full Stack Developer",
-    //   start: "2015",
-    //   end: "2021",
-    //   description: (
-    //     <>
-    //       Successfully transitioned from mobile to full-stack development while
-    //       leading distributed teams.
-    //       <ul className="list-inside list-disc">
-    //         <li>
-    //           Led frontend team at Evercast, building real-time platform
-    //           supporting 30+ users per room with HD streaming and collaboration
-    //           tools
-    //         </li>
-    //         <li>
-    //           Developed offline-first Android app for DKMS, improving donor
-    //           registration process
-    //         </li>
-    //         <li>
-    //           Led development teams across multiple successful client projects
-    //         </li>
-    //       </ul>
-    //     </>
-    //   ),
-    // },
-    // {
-    //   company: "Jojo Mobile",
-    //   link: "https://bsgroup.eu/",
-    //   badges: ["On Site", "Android", "Java", "Kotlin"],
-    //   title: "Android Developer → Lead Android Developer",
-    //   start: "2012",
-    //   end: "2015",
-    //   description: (
-    //     <>
-    //       First Android developer, grew and led a team of 15+ engineers while
-    //       establishing engineering culture.
-    //       <ul className="list-inside list-disc">
-    //         <li>
-    //           Developed apps for major Polish companies including LOT, Polskie
-    //           Radio, and Agora
-    //         </li>
-    //         <li>Built and mentored high-performing mobile development team</li>
-    //       </ul>
-    //     </>
-    //   ),
-    // },
-    // {
-    //   company: "Nokia Siemens Networks",
-    //   link: "https://www.nokia.com",
-    //   badges: ["On Site", "C/C++", "LTE", "Agile"],
-    //   title: "C/C++ Developer",
-    //   start: "2010",
-    //   end: "2012",
-    //   description:
-    //     "Developed software for LTE base stations at enterprise scale, gaining strong fundamentals in software architecture, testing practices, and cross-team collaboration.",
-    // },
-  ],
   skills: [
     "Azure",
-    "Python",
-    "Powershell",
-    "Bash",
-    "Docker",
+    "AWS",
+    "Microsoft 365",
     "Terraform",
     "Bicep",
-    "Git",
-    "Github Actions",
-    "CI/CD",
-    "DevOps",
-    "Linux",
+    "ARM Templates",
+    "Docker",
     "Kubernetes",
+    "GitHub Actions",
+    "Azure DevOps",
+    "CI/CD",
+    "PowerShell",
+    "Python",
+    "Bash",
+    "Linux",
+    "IAM & RBAC",
+    "Azure Monitor",
+    "Networking",
   ],
   projects: [
-    // {
-    //   title: "Monito",
-    //   techStack: ["TypeScript", "Next.js", "Browser Extension", "PostgreSQL"],
-    //   description:
-    //     "Browser extension for debugging web applications. Includes taking screenshots, screen recording, E2E tests generation and generating bug reports",
-    //   link: {
-    //     label: "monito.dev",
-    //     href: "https://monito.dev/",
-    //   },
-    // },
-    // {
-    //   title: "Consultly",
-    //   techStack: [
-    //     "TypeScript",
-    //     "Next.js",
-    //     "Vite",
-    //     "GraphQL",
-    //     "WebRTC",
-    //     "Tailwind CSS",
-    //     "PostgreSQL",
-    //     "Redis",
-    //   ],
-    //   description:
-    //     "Platform for online consultations with real-time video meetings and scheduling",
-    //   link: {
-    //     label: "consultly.com",
-    //     href: "https://consultly.com/",
-    //   },
-    // },
-    // {
-    //   title: "Minimalist CV",
-    //   techStack: ["TypeScript", "Next.js", "Tailwind CSS"],
-    //   description:
-    //     "An open source minimalist, print friendly CV template with a focus on readability and clean design. >9k stars on GitHub",
-    //   link: {
-    //     label: "Minimalist CV",
-    //     href: "https://github.com/BartoszJarocki/cv",
-    //   },
-    // },
+    {
+      title: "Cloud-Native Resume (AWS DevOps Pipeline)",
+      techStack: [
+        "Terraform",
+        "AWS ECS",
+        "Docker",
+        "GitHub Actions",
+        "Route 53",
+        "S3",
+      ],
+      description:
+        "End-to-end AWS DevOps pipeline: Terraform-provisioned infrastructure with remote S3 state, a GitHub Actions CI/CD flow building Dockerized images onto Amazon ECS behind an Application Load Balancer, with Route 53 DNS - fully automated from commit to live deploy.",
+      link: {
+        label: "rajat.cloud",
+        href: "https://rajat.cloud",
+      },
+    },
+    {
+      title: "Task Manager (Azure AKS Platform)",
+      techStack: ["Azure AKS", "Kubernetes", "Terraform", "Docker", "azd"],
+      description:
+        "Cloud-native Kubernetes platform on Azure AKS, provisioned with Terraform. Containerized micro-services with service discovery, Horizontal Pod Autoscaling, Kubernetes Secrets, ingress routing and zero-touch rollout via the Azure Developer CLI.",
+    },
   ],
 } as const;

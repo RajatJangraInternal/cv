@@ -1,6 +1,6 @@
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 
 import "./globals.css";
 import type React from "react";
@@ -10,10 +10,17 @@ import { RESUME_DATA } from "@/data/resume-data";
 const inter = Inter({
   subsets: ["latin"],
   display: "swap",
+  variable: "--font-sans",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-mono",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://cv.jarocki.me"),
+  metadataBase: new URL(RESUME_DATA.personalWebsiteUrl),
   title: {
     default: `${RESUME_DATA.name} - ${RESUME_DATA.about}`,
     template: `%s | ${RESUME_DATA.name}`,
@@ -24,11 +31,14 @@ export const metadata: Metadata = {
     "cv",
     "portfolio",
     RESUME_DATA.name,
-    "software engineer",
-    "full stack developer",
-    "react",
-    "next.js",
-    "typescript",
+    "cloud consultant",
+    "cloud engineer",
+    "devops",
+    "azure",
+    "aws",
+    "terraform",
+    "kubernetes",
+    "infrastructure as code",
   ],
   authors: [{ name: RESUME_DATA.name }],
   creator: RESUME_DATA.name,
@@ -61,7 +71,6 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${RESUME_DATA.name} - ${RESUME_DATA.about}`,
     description: RESUME_DATA.about,
-    creator: "@BartoszJarocki",
   },
   alternates: {
     canonical: RESUME_DATA.personalWebsiteUrl,
@@ -70,13 +79,28 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
+    { media: "(prefers-color-scheme: light)", color: "#f7fafc" },
+    { media: "(prefers-color-scheme: dark)", color: "#0b1220" },
   ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
 };
+
+// Set the theme before paint to avoid a flash of the wrong color scheme.
+const themeInitScript = `
+(function () {
+  try {
+    document.documentElement.classList.add('js');
+    var stored = localStorage.getItem('theme');
+    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    var isDark = stored ? stored === 'dark' : prefersDark;
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+})();
+`;
 
 export default function RootLayout({
   children,
@@ -84,11 +108,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.className}>
-      <body>
+    <html
+      lang="en"
+      className={`${inter.variable} ${jetbrainsMono.variable} font-sans`}
+      suppressHydrationWarning={true}
+    >
+      <head>
+        {/* Sets the theme before first paint to avoid a flash of the wrong color scheme. */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
+      <body className="cv-backdrop">
         <ErrorBoundary>{children}</ErrorBoundary>
+        <Analytics />
       </body>
-      <Analytics />
     </html>
   );
 }
+   

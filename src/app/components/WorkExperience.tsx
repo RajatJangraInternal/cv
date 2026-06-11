@@ -78,7 +78,7 @@ function CompanyLink({
 }: CompanyLinkProps) {
   return (
     <a
-      className="hover:underline"
+      className="decoration-brand/50 underline-offset-4 hover:text-brand hover:underline"
       href={link}
       target="_blank"
       rel="noopener noreferrer"
@@ -103,7 +103,7 @@ function WorkExperienceItem({
   const { company, link, badges, title, start, end, description } = work;
 
   return (
-    <Card className="py-1 print:py-0">
+    <Card className="cv-card px-4 py-3 print:border-0 print:bg-transparent print:p-0 print:shadow-none">
       <CardHeader className="print:space-y-1">
         <div className="flex items-center justify-between gap-x-2 text-base">
           <h3 className="inline-flex items-center justify-center gap-x-1 font-semibold leading-none print:text-sm">
@@ -116,7 +116,7 @@ function WorkExperienceItem({
           <WorkPeriod start={start} end={end} />
         </div>
 
-        <h4 className="font-mono text-sm font-semibold leading-none print:text-[12px]">
+        <h4 className="font-mono text-sm font-semibold leading-none text-brand print:text-[12px] print:text-foreground">
           {title}
         </h4>
       </CardHeader>
@@ -153,12 +153,15 @@ export function WorkExperience({
         Work Experience
       </h2>
       <div
-        className="space-y-4 print:space-y-0"
+        className="cv-timeline space-y-4 print:space-y-0"
         role="feed"
         aria-labelledby="work-experience"
       >
         {work.map((item) => (
-          <article key={`${item.company}-${item.start}`}>
+          <article
+            key={`${item.company}-${item.start}`}
+            className="cv-timeline-item"
+          >
             <WorkExperienceItem work={item} />
           </article>
         ))}

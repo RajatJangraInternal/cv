@@ -35,7 +35,7 @@ function EducationItem({ education }: EducationItemProps) {
   const { school, start, end, degree } = education;
 
   return (
-    <Card>
+    <Card className="cv-card px-4 py-3 print:border-0 print:bg-transparent print:p-0 print:shadow-none">
       <CardHeader>
         <div className="flex items-center justify-between gap-x-2 text-base">
           <h3

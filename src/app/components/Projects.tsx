@@ -102,7 +102,7 @@ function ProjectCard({
   link,
 }: ProjectCardProps) {
   return (
-    <Card className="flex h-full flex-col overflow-hidden border p-3">
+    <Card className="cv-card flex h-full flex-col overflow-hidden p-3 print:border-0 print:bg-transparent print:p-2 print:shadow-none">
       <CardHeader>
         <div className="space-y-1">
           <CardTitle className="text-base">
@@ -139,7 +139,7 @@ export function Projects({
         Side projects
       </h2>
       <div
-        className="-mx-3 grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 print:grid-cols-3 print:gap-2"
+        className="-mx-3 grid grid-cols-1 gap-3 md:grid-cols-2 print:grid-cols-3 print:gap-2"
         role="feed"
         aria-labelledby="side-projects"
       >

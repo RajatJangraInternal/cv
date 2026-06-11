@@ -119,6 +119,57 @@ export const RESUME_DATA: ResumeData = {
       ),
     },
   ],
+  certifications: [
+    {
+      name: "Microsoft Certified: Azure Solutions Architect Expert",
+      issuer: "Microsoft",
+      date: "2026",
+      credentialUrl:
+        "https://learn.microsoft.com/api/credentials/share/en-in/RajatKumar2653/CF470145D8466660?sharingId=CEB12D732975539D",
+    },
+    {
+      name: "Microsoft Certified: DevOps Engineer Expert",
+      issuer: "Microsoft",
+      date: "2026",
+      credentialUrl:
+        "https://learn.microsoft.com/api/credentials/share/en-us/RajatKumar2653/CFC85941446D96D0?sharingId=CEB12D732975539D",
+    },
+    {
+      name: "Microsoft Certified: Cybersecurity Architect Expert",
+      issuer: "Microsoft",
+      date: "2026",
+      credentialUrl:
+        "https://learn.microsoft.com/api/credentials/share/en-us/RajatKumar2653/9EF1C4333F779FB7?sharingId=CEB12D732975539D",
+    },
+    {
+      name: "Microsoft Certified: Security Operations Analyst Associate",
+      issuer: "Microsoft",
+      date: "2026",
+      credentialUrl:
+        "https://learn.microsoft.com/api/credentials/share/en-us/RajatKumar2653/30108B3BA757048D?sharingId=CEB12D732975539D",
+    },
+    {
+      name: "Microsoft Certified: Azure Administrator Associate",
+      issuer: "Microsoft",
+      date: "2026",
+      credentialUrl:
+        "https://learn.microsoft.com/api/credentials/share/en-in/RajatKumar2653/81D6372F4AE8B508?sharingId=CEB12D732975539D",
+    },
+    {
+      name: "Microsoft Certified: GitHub Copilot",
+      issuer: "Microsoft",
+      date: "2026",
+      credentialUrl:
+        "https://learn.microsoft.com/api/credentials/share/en-us/RajatKumar2653/748B322F2832C330?sharingId=CEB12D732975539D",
+    },
+    {
+      name: "Microsoft Certified: Azure Network Engineer Associate",
+      issuer: "Microsoft",
+      date: "2026",
+      credentialUrl:
+        "https://learn.microsoft.com/api/credentials/share/en-us/RajatKumar2653/4793B6BC612E7123?sharingId=CEB12D732975539D",
+    },
+  ],
   skills: [
     "Azure",
     "AWS",

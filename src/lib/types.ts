@@ -37,6 +37,12 @@ export interface ResumeData {
     end: string | null;
     description: string | React.ReactNode;
   }>;
+  certifications: Array<{
+    name: string;
+    issuer: string;
+    date: string;
+    credentialUrl: string;
+  }>;
   skills: string[];
   projects: Array<{
     title: string;

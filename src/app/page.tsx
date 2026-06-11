@@ -7,6 +7,7 @@ import { SectionSkeleton } from "@/components/section-skeleton";
 import { RESUME_DATA } from "@/data/resume-data";
 import { generateResumeStructuredData } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
+import { Certifications } from "./components/Certifications";
 import { Education } from "./components/Education";
 import { Header } from "./components/Header";
 import { Projects } from "./components/Projects";
@@ -121,6 +122,12 @@ export default function ResumePage() {
             <SectionErrorBoundary sectionName="Education">
               <Suspense fallback={<SectionSkeleton lines={3} />}>
                 <Education education={RESUME_DATA.education} />
+              </Suspense>
+            </SectionErrorBoundary>
+
+            <SectionErrorBoundary sectionName="Certifications">
+              <Suspense fallback={<SectionSkeleton lines={4} />}>
+                <Certifications certifications={RESUME_DATA.certifications} />
               </Suspense>
             </SectionErrorBoundary>
           </div>

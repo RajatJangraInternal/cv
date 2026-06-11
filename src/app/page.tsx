@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Certifications } from "./components/Certifications";
 import { Education } from "./components/Education";
 import { Header } from "./components/Header";
+import { Hero } from "./components/Hero";
 import { Projects } from "./components/Projects";
 import { Skills } from "./components/Skills";
 import { Summary } from "./components/Summary";
@@ -76,6 +77,8 @@ export default function ResumePage() {
           __html: JSON.stringify(structuredData),
         }}
       />
+      <Hero />
+
       <main
         className="container relative mx-auto scroll-my-12 overflow-auto p-4 print:p-11 md:p-16"
         id="main-content"
@@ -113,6 +116,12 @@ export default function ResumePage() {
               </Suspense>
             </SectionErrorBoundary>
 
+            <SectionErrorBoundary sectionName="Certifications">
+              <Suspense fallback={<SectionSkeleton lines={4} />}>
+                <Certifications certifications={RESUME_DATA.certifications} />
+              </Suspense>
+            </SectionErrorBoundary>
+
             <SectionErrorBoundary sectionName="Projects">
               <Suspense fallback={<SectionSkeleton lines={5} />}>
                 <Projects projects={RESUME_DATA.projects} />
@@ -122,12 +131,6 @@ export default function ResumePage() {
             <SectionErrorBoundary sectionName="Education">
               <Suspense fallback={<SectionSkeleton lines={3} />}>
                 <Education education={RESUME_DATA.education} />
-              </Suspense>
-            </SectionErrorBoundary>
-
-            <SectionErrorBoundary sectionName="Certifications">
-              <Suspense fallback={<SectionSkeleton lines={4} />}>
-                <Certifications certifications={RESUME_DATA.certifications} />
               </Suspense>
             </SectionErrorBoundary>
           </div>

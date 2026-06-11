@@ -4,65 +4,72 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 224 71.4% 4.1%;
+    --background: 210 40% 99%;
+    --foreground: 222 47% 11%;
 
     --card: 0 0% 100%;
-    --card-foreground: 224 71.4% 4.1%;
+    --card-foreground: 222 47% 11%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 224 71.4% 4.1%;
+    --popover-foreground: 222 47% 11%;
 
-    --primary: 220.9 39.3% 11%;
+    --primary: 222 47% 11%;
     --primary-foreground: 210 20% 98%;
 
-    --secondary: 220 14.3% 95.9%;
-    --secondary-foreground: 220.9 39.3% 11%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
 
-    --muted: 220 14.3% 95.9%;
-    --muted-foreground: 220 8.9% 46.1%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
 
-    --accent: 220 14.3% 95.9%;
-    --accent-foreground: 220.9 39.3% 11%;
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 20% 98%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 224 71.4% 4.1%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 199 89% 48%;
 
-    --radius: 0.5rem;
+    /* Brand accent (cloud blue) */
+    --brand: 199 89% 48%;
+    --brand-2: 217 91% 60%;
+
+    --radius: 0.6rem;
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
-    --foreground: 210 20% 98%;
+    --background: 222 47% 7%;
+    --foreground: 210 40% 96%;
 
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
+    --card: 222 44% 10%;
+    --card-foreground: 210 40% 96%;
 
-    --popover: 224 71.4% 4.1%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 222 44% 10%;
+    --popover-foreground: 210 40% 96%;
 
-    --primary: 210 20% 98%;
-    --primary-foreground: 220.9 39.3% 11%;
+    --primary: 210 40% 96%;
+    --primary-foreground: 222 47% 11%;
 
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
+    --secondary: 217 33% 16%;
+    --secondary-foreground: 210 40% 96%;
 
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
+    --muted: 217 33% 16%;
+    --muted-foreground: 215 20% 65%;
 
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 199 89% 52%;
+    --accent-foreground: 222 47% 7%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 20% 98%;
 
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 216 12.2% 83.9%;
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 199 89% 52%;
+
+    --brand: 199 89% 55%;
+    --brand-2: 217 91% 66%;
   }
 }
 
@@ -70,11 +77,126 @@
   * {
     @apply border-border;
   }
+  html {
+    scroll-behavior: smooth;
+  }
   body {
     @apply bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background-color: hsl(var(--brand) / 0.25);
+  }
+}
+
+@layer components {
+  /* Ambient page background: soft brand glow + faint grid (screen only) */
+  .cv-backdrop {
+    position: relative;
+    min-height: 100vh;
+    background-color: hsl(var(--background));
+    background-image:
+      radial-gradient(
+        60rem 60rem at 85% -10%,
+        hsl(var(--brand) / 0.1),
+        transparent 60%
+      ),
+      radial-gradient(
+        50rem 50rem at -10% 10%,
+        hsl(var(--brand-2) / 0.08),
+        transparent 55%
+      ),
+      linear-gradient(
+        to right,
+        hsl(var(--foreground) / 0.025) 1px,
+        transparent 1px
+      ),
+      linear-gradient(
+        to bottom,
+        hsl(var(--foreground) / 0.025) 1px,
+        transparent 1px
+      );
+    background-size: 100% 100%, 100% 100%, 2.5rem 2.5rem, 2.5rem 2.5rem;
+  }
+
+  /* Section headings get a brand accent bar + mono kicker feel */
+  #main-content h2 {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    letter-spacing: -0.01em;
+  }
+  #main-content h2::before {
+    content: "";
+    width: 0.25rem;
+    height: 1.05em;
+    border-radius: 9999px;
+    background: linear-gradient(
+      to bottom,
+      hsl(var(--brand)),
+      hsl(var(--brand-2))
+    );
+    flex: none;
+  }
+
+  /* Cards with a soft border, brand-tinted hover lift */
+  .cv-card {
+    border: 1px solid hsl(var(--border));
+    background: hsl(var(--card) / 0.7);
+    backdrop-filter: blur(2px);
+    border-radius: var(--radius);
+    transition:
+      transform 0.18s ease,
+      border-color 0.18s ease,
+      box-shadow 0.18s ease;
+  }
+  .cv-card:hover {
+    transform: translateY(-2px);
+    border-color: hsl(var(--brand) / 0.55);
+    box-shadow:
+      0 1px 0 hsl(var(--brand) / 0.15),
+      0 12px 30px -12px hsl(var(--brand) / 0.35);
+  }
+
+  .text-gradient {
+    background: linear-gradient(
+      120deg,
+      hsl(var(--foreground)),
+      hsl(var(--brand))
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
 }
 
 .print-force-new-page {
   page-break-before: always;
+}
+
+/* ---- Print: strip all the screen flourish, keep it crisp B/W ---- */
+@media print {
+  .cv-backdrop {
+    background: #fff !important;
+  }
+  .cv-card {
+    border: none !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+    transform: none !important;
+  }
+  #main-content h2::before {
+    background: #111 !important;
+  }
+  .text-gradient {
+    -webkit-text-fill-color: #111 !important;
+    color: #111 !important;
+  }
+  .no-print,
+  .print\:hidden {
+    display: none !important;
+  }
 }

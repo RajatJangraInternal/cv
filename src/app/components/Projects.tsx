@@ -102,7 +102,7 @@ function ProjectCard({
   link,
 }: ProjectCardProps) {
   return (
-    <Card className="flex h-full flex-col overflow-hidden border p-3">
+    <Card className="cv-card flex h-full flex-col overflow-hidden p-3 print:border-0 print:bg-transparent print:p-2 print:shadow-none">
       <CardHeader>
         <div className="space-y-1">
           <CardTitle className="text-base">
@@ -154,9 +154,4 @@ export function Projects({
               tags={project.techStack}
               link={project.link?.href}
             />
-          </article>
-        ))}
-      </div>
-    </Section>
-  );
-}
+         

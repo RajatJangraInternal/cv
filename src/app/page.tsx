@@ -14,6 +14,8 @@ import { Skills } from "./components/Skills";
 import { Summary } from "./components/Summary";
 import { WorkExperience } from "./components/WorkExperience";
 
+const ogImage = `${RESUME_DATA.personalWebsiteUrl}/opengraph-image`;
+
 export const metadata: Metadata = {
   title: `${RESUME_DATA.name} - Resume`,
   description: RESUME_DATA.about,
@@ -24,7 +26,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "https://cv.jarocki.me/opengraph-image",
+        url: ogImage,
         width: 1200,
         height: 630,
         alt: `${RESUME_DATA.name}'s profile picture`,
@@ -35,7 +37,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${RESUME_DATA.name} - Resume`,
     description: RESUME_DATA.about,
-    images: ["https://cv.jarocki.me/opengraph-image"],
+    images: [ogImage],
   },
 };
 
@@ -82,7 +84,7 @@ export default function ResumePage() {
         </div>
 
         <section
-          className="mx-auto w-full max-w-2xl space-y-8 bg-white print:space-y-4"
+          className="mx-auto w-full max-w-2xl space-y-8 rounded-2xl border border-border/60 bg-card/60 p-6 shadow-sm backdrop-blur-sm print:space-y-4 print:border-0 print:bg-white print:p-0 print:shadow-none print:backdrop-blur-none sm:p-8"
           aria-label="Resume Content"
         >
           <SectionErrorBoundary sectionName="Header">
@@ -98,21 +100,15 @@ export default function ResumePage() {
               </Suspense>
             </SectionErrorBoundary>
 
-            <SectionErrorBoundary sectionName="Work Experience">
-              <Suspense fallback={<SectionSkeleton lines={6} />}>
-                <WorkExperience work={RESUME_DATA.work} />
-              </Suspense>
-            </SectionErrorBoundary>
-
-            <SectionErrorBoundary sectionName="Education">
-              <Suspense fallback={<SectionSkeleton lines={3} />}>
-                <Education education={RESUME_DATA.education} />
-              </Suspense>
-            </SectionErrorBoundary>
-
             <SectionErrorBoundary sectionName="Skills">
               <Suspense fallback={<SectionSkeleton lines={2} />}>
                 <Skills skills={RESUME_DATA.skills} />
+              </Suspense>
+            </SectionErrorBoundary>
+
+            <SectionErrorBoundary sectionName="Work Experience">
+              <Suspense fallback={<SectionSkeleton lines={6} />}>
+                <WorkExperience work={RESUME_DATA.work} />
               </Suspense>
             </SectionErrorBoundary>
 
@@ -121,16 +117,29 @@ export default function ResumePage() {
                 <Projects projects={RESUME_DATA.projects} />
               </Suspense>
             </SectionErrorBoundary>
+
+            <SectionErrorBoundary sectionName="Education">
+              <Suspense fallback={<SectionSkeleton lines={3} />}>
+                <Education education={RESUME_DATA.education} />
+              </Suspense>
+            </SectionErrorBoundary>
           </div>
         </section>
 
         <nav className="print:hidden" aria-label="Quick navigation">
           <CommandMenu links={getCommandMenuLinks()} />
         </nav>
+
         {/* Blog navigation link */}
-        <div className="mx-auto mt-8 max-w-2xl text-center">
-          <a href="/blog" className={cn(badgeVariants())}>
-            Visit My Blog
+        <div className="mx-auto mt-8 max-w-2xl text-center print:hidden">
+          <a
+            href="/blog"
+            className={cn(
+              badgeVariants({ variant: "outline" }),
+              "gap-1.5 border-brand/40 px-4 py-1.5 text-sm text-brand transition-colors hover:bg-brand/10"
+            )}
+          >
+            Read my blog →
           </a>
         </div>
       </main>

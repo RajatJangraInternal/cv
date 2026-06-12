@@ -208,6 +208,57 @@ function Particles({ color }: { color: string }) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Ground: soft glow pool + shadow catcher                             */
+/* ------------------------------------------------------------------ */
+
+/** Radial glow under the topology so the city doesn't float in a void. */
+function GroundGlow({ color }: { color: string }) {
+  const texture = React.useMemo(() => {
+    const canvas = document.createElement("canvas");
+    canvas.width = 256;
+    canvas.height = 256;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      const gradient = ctx.createRadialGradient(128, 128, 10, 128, 128, 128);
+      gradient.addColorStop(0, color);
+      gradient.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 256, 256);
+    }
+    return new THREE.CanvasTexture(canvas);
+  }, [color]);
+
+  React.useEffect(() => () => texture.dispose(), [texture]);
+
+  return (
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.004, 0]}>
+      <planeGeometry args={[26, 26]} />
+      <meshBasicMaterial
+        map={texture}
+        transparent={true}
+        opacity={0.22}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </mesh>
+  );
+}
+
+/** Invisible plane that only renders the shadows cast onto it. */
+function ShadowCatcher() {
+  return (
+    <mesh
+      rotation={[-Math.PI / 2, 0, 0]}
+      position={[0, 0.012, 0]}
+      receiveShadow={true}
+    >
+      <planeGeometry args={[40, 40]} />
+      <shadowMaterial transparent={true} opacity={0.3} />
+    </mesh>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Region: glass platform + rim ring + floating label                  */
 /* ------------------------------------------------------------------ */
 
@@ -295,7 +346,7 @@ function GlassPlatform({
   return (
     <group position={[position.x, 0, position.z]}>
       {/* Glass disc */}
-      <mesh position={[0, 0.04, 0]}>
+      <mesh position={[0, 0.04, 0]} castShadow={true}>
         <cylinderGeometry args={[1.35, 1.35, 0.08, 48]} />
         <meshPhysicalMaterial
           color={color}
@@ -352,7 +403,7 @@ interface FormProps {
 function TowerForm({ h, color }: FormProps) {
   return (
     <group>
-      <mesh position={[0, h / 2, 0]}>
+      <mesh position={[0, h / 2, 0]} castShadow={true}>
         <cylinderGeometry args={[0.42, 0.48, h, 6]} />
         <meshPhysicalMaterial
           color={color}
@@ -394,7 +445,7 @@ function RackForm({ h, color, altColor }: FormProps) {
     <group>
       {[0, 1, 2].map((i) => (
         <group key={i} position={[0, unit * i + unit / 2, 0]}>
-          <mesh>
+          <mesh castShadow={true}>
             <boxGeometry args={[0.72, unit * 0.82, 0.72]} />
             <meshStandardMaterial
               color={i === 1 ? altColor : color}
@@ -422,7 +473,7 @@ function RackForm({ h, color, altColor }: FormProps) {
 function ConduitForm({ h, color, altColor }: FormProps) {
   return (
     <group>
-      <mesh position={[0, h / 2, 0]}>
+      <mesh position={[0, h / 2, 0]} castShadow={true}>
         <boxGeometry args={[1.5, h, 0.55]} />
         <meshPhysicalMaterial
           color={color}
@@ -454,7 +505,7 @@ function ClusterForm({ h, color, altColor }: FormProps) {
   return (
     <group>
       {blocks.map(([x, bh, z, c]) => (
-        <mesh key={`${x}-${z}`} position={[x, bh / 2, z]}>
+        <mesh key={`${x}-${z}`} position={[x, bh / 2, z]} castShadow={true}>
           <boxGeometry args={[0.4, bh, 0.4]} />
           <meshStandardMaterial
             color={c}
@@ -483,7 +534,7 @@ function BadgeForm({ h, color, altColor }: FormProps) {
 
   return (
     <group>
-      <mesh position={[0, h / 2, 0]}>
+      <mesh position={[0, h / 2, 0]} castShadow={true}>
         <cylinderGeometry args={[0.3, 0.36, h, 18]} />
         <meshPhysicalMaterial
           color={color}
@@ -493,7 +544,7 @@ function BadgeForm({ h, color, altColor }: FormProps) {
           clearcoat={1}
         />
       </mesh>
-      <mesh ref={gemRef} position={[0, h + 0.32, 0]}>
+      <mesh ref={gemRef} position={[0, h + 0.32, 0]} castShadow={true}>
         <octahedronGeometry args={[0.26]} />
         <meshStandardMaterial
           color={altColor}
@@ -521,7 +572,7 @@ function RingForm({ h, color, altColor }: FormProps) {
 
   return (
     <group>
-      <mesh position={[0, h / 2, 0]}>
+      <mesh position={[0, h / 2, 0]} castShadow={true}>
         <cylinderGeometry args={[0.22, 0.26, h, 20]} />
         <meshStandardMaterial
           color={color}
@@ -531,8 +582,8 @@ function RingForm({ h, color, altColor }: FormProps) {
           metalness={0.3}
         />
       </mesh>
-      <mesh ref={haloRef} position={[0, h * 0.65, 0]}>
-        <torusGeometry args={[0.5, 0.035, 8, 40]} />
+      <mesh ref={haloRef} position={[0, h * 0.65, 0]} castShadow={true}>
+        <torusGeometry args={[0.5, 0.035, 8, 48]} />
         <meshStandardMaterial
           color={altColor}
           emissive={altColor}
@@ -666,7 +717,7 @@ function Arc({
 
   const tube = React.useMemo(() => {
     if (!curve) return null;
-    return new THREE.TubeGeometry(curve, 36, 0.035, 6, false);
+    return new THREE.TubeGeometry(curve, 64, 0.035, 8, false);
   }, [curve]);
 
   if (!arc || !tube) return null;
@@ -684,7 +735,7 @@ function Arc({
         />
       </mesh>
       <mesh ref={pulseRef} visible={false}>
-        <sphereGeometry args={[0.11, 12, 12]} />
+        <sphereGeometry args={[0.11, 16, 16]} />
         <meshBasicMaterial color={color} />
       </mesh>
     </group>
@@ -735,9 +786,10 @@ function CameraRig() {
     radius.current += (desiredRadius - radius.current) * 0.03;
 
     const angle = Math.sin(t * 0.08) * 0.35 + 0.45;
+    // Lower eye height than a map view: towers read as towers.
     camera.position.set(
       Math.sin(angle) * radius.current,
-      6.2 + Math.sin(t * 0.11) * 0.9,
+      4.7 + Math.sin(t * 0.11) * 0.7,
       Math.cos(angle) * radius.current
     );
     camera.lookAt(look.current);
@@ -782,6 +834,8 @@ function Topology({ colors }: { colors: ThemeColors }) {
           new THREE.Color(colors.gridFaint),
         ]}
       />
+      <GroundGlow color={colors.brand} />
+      <ShadowCatcher />
       {SCENE_REGIONS.map((region, i) => (
         <GlassPlatform
           key={region.id}
@@ -830,8 +884,9 @@ export default function InfraScene({
     <Canvas
       aria-hidden="true"
       frameloop={frameloop}
-      dpr={[1, 1.5]}
-      camera={{ fov: 42, position: [9, 6.2, 7], near: 0.5, far: 60 }}
+      shadows={true}
+      dpr={[1, 2]}
+      camera={{ fov: 42, position: [9, 4.7, 7], near: 0.5, far: 60 }}
       gl={{ alpha: true, antialias: true, powerPreference: "low-power" }}
       onCreated={({ gl }) => {
         onReady();
@@ -846,8 +901,24 @@ export default function InfraScene({
       }}
       className="!absolute inset-0"
     >
-      <ambientLight intensity={0.65} />
-      <directionalLight position={[6, 10, 4]} intensity={1.1} />
+      <ambientLight intensity={0.55} />
+      {/* Key light: casts the contact shadows that ground the scene. */}
+      <directionalLight
+        position={[8, 12, 6]}
+        intensity={1.25}
+        castShadow={true}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-left={-13}
+        shadow-camera-right={13}
+        shadow-camera-top={13}
+        shadow-camera-bottom={-13}
+        shadow-camera-near={2}
+        shadow-camera-far={32}
+        shadow-bias={-0.0004}
+      />
+      {/* Cool fill from the opposite side so shadowed faces keep detail. */}
+      <directionalLight position={[-7, 5, -6]} intensity={0.35} />
       <pointLight position={[0, 4, 0]} intensity={6} distance={14} />
       <CameraRig />
       <Topology colors={colors} />

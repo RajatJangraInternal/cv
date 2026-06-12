@@ -117,8 +117,8 @@ export const SCENE_RESOURCES: readonly SceneResource[] = [
     id: "res:certs",
     region: "region:central-india",
     kind: "badge",
-    dx: 1.3,
-    dz: 0.8,
+    dx: 0.92,
+    dz: 0.55,
     h: 0.8,
   },
   {

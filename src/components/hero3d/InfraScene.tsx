@@ -33,20 +33,20 @@ function readThemeColors(): ThemeColors {
     return `hsl(${h}, ${s}, ${l})`;
   };
   return {
-    brand: hsl("--brand", "199 89% 55%"),
-    brand2: hsl("--brand-2", "217 91% 66%"),
-    grid: hsl("--border", "217 33% 20%"),
-    gridFaint: hsl("--muted", "217 33% 16%"),
-    label: hsl("--muted-foreground", "215 20% 65%"),
+    brand: hsl("--brand", "330 92% 62%"),
+    brand2: hsl("--brand-2", "286 88% 68%"),
+    grid: hsl("--border", "330 22% 19%"),
+    gridFaint: hsl("--muted", "330 22% 15%"),
+    label: hsl("--muted-foreground", "330 12% 66%"),
   };
 }
 
 const DEFAULT_COLORS: ThemeColors = {
-  brand: "hsl(199, 89%, 55%)",
-  brand2: "hsl(217, 91%, 66%)",
-  grid: "hsl(217, 33%, 20%)",
-  gridFaint: "hsl(217, 33%, 16%)",
-  label: "hsl(215, 20%, 65%)",
+  brand: "hsl(330, 92%, 62%)",
+  brand2: "hsl(286, 88%, 68%)",
+  grid: "hsl(330, 22%, 19%)",
+  gridFaint: "hsl(330, 22%, 15%)",
+  label: "hsl(330, 12%, 66%)",
 };
 
 function useThemeColors(): ThemeColors {
@@ -151,6 +151,61 @@ function applyFlash(group: THREE.Group, amount: number): void {
 }
 
 /* ------------------------------------------------------------------ */
+/* Ambient ember particles drifting up through the topology            */
+/* ------------------------------------------------------------------ */
+
+const PARTICLE_COUNT = 220;
+const PARTICLE_CEILING = 7;
+
+function Particles({ color }: { color: string }) {
+  const pointsRef = React.useRef<THREE.Points>(null);
+
+  const data = React.useMemo(() => {
+    const positions = new Float32Array(PARTICLE_COUNT * 3);
+    const speeds = new Float32Array(PARTICLE_COUNT);
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 26;
+      positions[i * 3 + 1] = Math.random() * PARTICLE_CEILING;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 20 - 2;
+      speeds[i] = 0.15 + Math.random() * 0.5;
+    }
+    return { positions, speeds };
+  }, []);
+
+  useFrame((_, delta) => {
+    const points = pointsRef.current;
+    if (!points) return;
+    const pos = points.geometry.attributes.position as THREE.BufferAttribute;
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      let y = pos.getY(i) + data.speeds[i] * delta;
+      if (y > PARTICLE_CEILING) y = 0;
+      pos.setY(i, y);
+    }
+    pos.needsUpdate = true;
+  });
+
+  return (
+    <points ref={pointsRef}>
+      <bufferGeometry>
+        <bufferAttribute
+          attach="attributes-position"
+          args={[data.positions, 3]}
+        />
+      </bufferGeometry>
+      <pointsMaterial
+        color={color}
+        size={0.07}
+        transparent={true}
+        opacity={0.5}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+        sizeAttenuation={true}
+      />
+    </points>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Region: glass platform + rim ring + floating label                  */
 /* ------------------------------------------------------------------ */
 
@@ -208,15 +263,31 @@ function GlassPlatform({
   labelColor: string;
 }) {
   const ringRef = React.useRef<THREE.MeshStandardMaterial>(null);
+  const pingRef = React.useRef<THREE.Mesh>(null);
+  const pingMatRef = React.useRef<THREE.MeshBasicMaterial>(null);
   const position = React.useMemo(() => regionPosition(regionId), [regionId]);
+  // Deterministic per-region phase so the pings don't fire in unison.
+  const pingPhase = React.useMemo(
+    () => Math.abs(position.x * 0.37 + position.z * 0.61) % 1,
+    [position]
+  );
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     const ring = ringRef.current;
-    if (!ring) return;
-    const entry = pulses[regionId];
-    const since = entry ? performance.now() - entry.t : Number.MAX_VALUE;
-    const pulse = since < PULSE_MS ? 1 - since / PULSE_MS : 0;
-    ring.emissiveIntensity = 0.7 + pulse * 2.4;
+    if (ring) {
+      const entry = pulses[regionId];
+      const since = entry ? performance.now() - entry.t : Number.MAX_VALUE;
+      const pulse = since < PULSE_MS ? 1 - since / PULSE_MS : 0;
+      ring.emissiveIntensity = 0.7 + pulse * 2.4;
+    }
+    // Radar ping: an expanding, fading ring on a continuous loop.
+    const ping = pingRef.current;
+    const pingMat = pingMatRef.current;
+    if (ping && pingMat) {
+      const p = (clock.getElapsedTime() * 0.32 + pingPhase) % 1;
+      ping.scale.setScalar(1 + p * 1.25);
+      pingMat.opacity = (1 - p) * 0.35;
+    }
   });
 
   return (
@@ -242,6 +313,22 @@ function GlassPlatform({
           color={color}
           emissive={color}
           emissiveIntensity={0.7}
+        />
+      </mesh>
+      {/* Expanding radar ping */}
+      <mesh
+        ref={pingRef}
+        position={[0, 0.05, 0]}
+        rotation={[-Math.PI / 2, 0, 0]}
+      >
+        <ringGeometry args={[1.3, 1.37, 48]} />
+        <meshBasicMaterial
+          ref={pingMatRef}
+          color={color}
+          transparent={true}
+          opacity={0}
+          side={THREE.DoubleSide}
+          depthWrite={false}
         />
       </mesh>
       <RegionLabel text={label} color={labelColor} position={[0, 0.62, 1.05]} />
@@ -489,13 +576,17 @@ function ResourceNode({
     return new THREE.Vector3(base.x + resource.dx, 0, base.z + resource.dz);
   }, [resource]);
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     const group = groupRef.current;
     if (!group) return;
     const now = performance.now();
     const entry = anims[resource.id];
     const s = Math.max(presence(entry, now), 0.0001);
     group.scale.setScalar(s);
+    // Gentle hover-bob once present, phase-offset per resource.
+    const bobPhase = position.x * 1.3 + position.z * 0.7;
+    group.position.y =
+      0.08 + Math.sin(clock.getElapsedTime() * 1.1 + bobPhase) * 0.045 * s;
     const glow = Math.max(flash(entry, now), flash(pulses[resource.id], now));
     applyFlash(group, glow);
   });
@@ -644,7 +735,7 @@ function CameraRig() {
     const angle = Math.sin(t * 0.08) * 0.35 + 0.45;
     camera.position.set(
       Math.sin(angle) * radius.current,
-      6.2,
+      6.2 + Math.sin(t * 0.11) * 0.9,
       Math.cos(angle) * radius.current
     );
     camera.lookAt(look.current);
@@ -712,6 +803,7 @@ function Topology({ colors }: { colors: ThemeColors }) {
       {SCENE_ARCS.map((arc) => (
         <Arc key={arc.id} arcId={arc.id} anims={anims} color={colors.brand} />
       ))}
+      <Particles color={colors.brand2} />
     </group>
   );
 }

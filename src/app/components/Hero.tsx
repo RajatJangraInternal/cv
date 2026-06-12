@@ -34,6 +34,13 @@ const HERO_STATS = [
 
 const BUILDING_WITH = ["Azure", "AWS", "Terraform"] as const;
 
+const TYPED_ROLES = [
+  "Cloud Infrastructure & DevOps Automation Engineer",
+  "Infrastructure as Code — Terraform · Bicep · ARM",
+  "CI/CD & Platform Automation at Enterprise Scale",
+  "L2/L3 Cloud Operations — Azure & AWS",
+] as const;
+
 /* ------------------------------------------------------------------ */
 /* Count-up stat                                                       */
 /* ------------------------------------------------------------------ */
@@ -72,6 +79,63 @@ function StatValue({ value, suffix }: { value: number; suffix: string }) {
 }
 
 /* ------------------------------------------------------------------ */
+/* Typewriter role line                                                */
+/* ------------------------------------------------------------------ */
+
+function TypedRole() {
+  // SSR/no-JS render shows the full first role; the cycle starts client-side.
+  const [display, setDisplay] = React.useState<string>(TYPED_ROLES[0]);
+
+  React.useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    let index = 0;
+    let len = TYPED_ROLES[0].length;
+    let deleting = true;
+    let timer = 0;
+
+    const tick = () => {
+      const role = TYPED_ROLES[index];
+      let delay: number;
+      if (deleting) {
+        len -= 1;
+        if (len === 0) {
+          deleting = false;
+          index = (index + 1) % TYPED_ROLES.length;
+          delay = 350;
+        } else {
+          delay = 18;
+        }
+        setDisplay(role.slice(0, len));
+      } else {
+        len += 1;
+        setDisplay(TYPED_ROLES[index].slice(0, len));
+        if (len === TYPED_ROLES[index].length) {
+          deleting = true;
+          delay = 2600;
+        } else {
+          delay = 38;
+        }
+      }
+      timer = window.setTimeout(tick, delay);
+    };
+
+    timer = window.setTimeout(tick, 2600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <p className="min-h-[2.5rem] font-mono text-sm text-brand/90 sm:min-h-[1.75rem] sm:text-base">
+      <span className="sr-only">{TYPED_ROLES[0]}</span>
+      <span aria-hidden="true">
+        {display}
+        <span className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] animate-pulse bg-brand" />
+      </span>
+    </p>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Canvas backdrop: particle torus knot + starfield                    */
 /* ------------------------------------------------------------------ */
 
@@ -92,7 +156,7 @@ function HeroCanvas() {
     if (!ctx) return;
 
     const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
+      "(prefers-reduced-motion: reduce)"
     ).matches;
 
     let brand = readHslVar("--brand");
@@ -151,7 +215,7 @@ function HeroCanvas() {
       jitter: number,
       rotX: number,
       rotY: number,
-      scale: number,
+      scale: number
     ) => {
       const r = 2 + Math.cos(3 * t) + jitter;
       let x = r * Math.cos(2 * t);
@@ -286,7 +350,7 @@ function SystemStatus() {
           hour: "2-digit",
           minute: "2-digit",
           timeZone: "Asia/Kolkata",
-        }),
+        })
       );
     update();
     const id = setInterval(update, 30_000);
@@ -382,9 +446,7 @@ export function Hero() {
           </span>
         </h1>
 
-        <p className="font-mono text-sm text-brand/90 sm:text-base">
-          Cloud Infrastructure &amp; DevOps Automation Engineer
-        </p>
+        <TypedRole />
 
         {/* Stats */}
         <dl className="mt-2 flex flex-wrap items-start justify-center gap-x-10 gap-y-5">

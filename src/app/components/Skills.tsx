@@ -1,6 +1,6 @@
-import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Section } from "@/components/ui/section";
+import { SKILL_GROUPS } from "@/data/resume-data";
 import { cn } from "@/lib/utils";
 
 type Skills = readonly string[];
@@ -41,15 +41,36 @@ interface SkillsProps {
 
 /**
  * Skills section component
- * Displays a list of professional skills as badges
+ * Displays professional skills as badges grouped under category kickers.
  */
 export function Skills({ skills, className }: SkillsProps) {
+  const grouped = new Set(SKILL_GROUPS.flatMap((group) => group.skills));
+  const ungrouped = skills.filter((skill) => !grouped.has(skill));
+
+  const groups = [
+    ...SKILL_GROUPS.map((group) => ({
+      ...group,
+      skills: group.skills.filter((skill) => skills.includes(skill)),
+    })).filter((group) => group.skills.length > 0),
+    ...(ungrouped.length > 0 ? [{ label: "more", skills: ungrouped }] : []),
+  ];
+
   return (
     <Section className={className}>
       <h2 className="text-xl font-bold" id="skills-section">
         Skills
       </h2>
-      <SkillsList skills={skills} aria-labelledby="skills-section" />
+      <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 print:grid-cols-2 print:gap-1">
+        {groups.map((group) => (
+          <div key={group.label} className="space-y-1.5">
+            <p className="font-mono text-[11px] tracking-wider text-brand/80 print:text-[9px] print:text-foreground">
+              {"// "}
+              {group.label}
+            </p>
+            <SkillsList skills={group.skills} />
+          </div>
+        ))}
+      </div>
     </Section>
   );
 }

@@ -1,8 +1,8 @@
 "use client";
 
 import { PrinterIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 
 /**
  * Screen-only action cluster shown in the header:

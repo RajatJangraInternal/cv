@@ -1,3 +1,4 @@
+import { ArrowUpRightIcon } from "lucide-react";
 import React from "react";
 import { Badge } from "../../components/ui/badge";
 import {
@@ -20,10 +21,7 @@ interface ProjectLinkProps {
 /**
  * Renders project title with optional link and status indicator
  */
-function ProjectLink({
-  title,
-  link,
-}: ProjectLinkProps) {
+function ProjectLink({ title, link }: ProjectLinkProps) {
   if (!link) {
     return <span>{title}</span>;
   }
@@ -34,13 +32,12 @@ function ProjectLink({
         href={link}
         target="_blank"
         rel="noopener noreferrer"
-        className="inline-flex items-center gap-1 hover:underline"
+        className="group/link inline-flex items-center gap-1 decoration-brand/50 underline-offset-4 hover:text-brand hover:underline"
         aria-label={`${title} project (opens in new tab)`}
       >
         {title}
-        <span
-          className="size-1 rounded-full bg-green-500"
-          title="Active project indicator"
+        <ArrowUpRightIcon
+          className="size-3.5 flex-none text-brand transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5 print:hidden"
           aria-hidden="true"
         />
       </a>
@@ -61,9 +58,7 @@ interface ProjectTagsProps {
 /**
  * Renders a list of technology tags used in the project
  */
-function ProjectTags({
-  tags,
-}: ProjectTagsProps) {
+function ProjectTags({ tags }: ProjectTagsProps) {
   if (tags.length === 0) return null;
 
   return (
@@ -95,12 +90,7 @@ interface ProjectCardProps {
 /**
  * Card component displaying project information
  */
-function ProjectCard({
-  title,
-  description,
-  tags,
-  link,
-}: ProjectCardProps) {
+function ProjectCard({ title, description, tags, link }: ProjectCardProps) {
   return (
     <Card className="cv-card flex h-full flex-col overflow-hidden p-3 print:border-0 print:bg-transparent print:p-2 print:shadow-none">
       <CardHeader>
@@ -130,9 +120,7 @@ interface ProjectsProps {
 /**
  * Section component displaying all side projects
  */
-export function Projects({
-  projects,
-}: ProjectsProps) {
+export function Projects({ projects }: ProjectsProps) {
   return (
     <Section className="scroll-mb-16 print:space-y-4">
       <h2 className="text-xl font-bold" id="side-projects">

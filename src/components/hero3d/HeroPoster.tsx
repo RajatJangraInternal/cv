@@ -35,21 +35,21 @@ export function HeroPoster() {
       <g fill="none" strokeWidth="2.5" strokeLinecap="round">
         <path
           d="M 640 470 Q 430 220 300 380"
-          stroke="hsl(var(--brand))"
+          stroke="hsl(var(--scene-1))"
           opacity="0.55"
         />
         <path
           d="M 640 470 Q 600 170 480 300"
-          stroke="hsl(var(--brand))"
+          stroke="hsl(var(--scene-1))"
           opacity="0.45"
         />
         <path
           d="M 640 470 Q 800 200 880 330"
-          stroke="hsl(var(--brand))"
+          stroke="hsl(var(--scene-1))"
           opacity="0.55"
         />
-        <circle cx="430" cy="295" r="5" fill="hsl(var(--brand))" />
-        <circle cx="810" cy="265" r="5" fill="hsl(var(--brand-2))" />
+        <circle cx="430" cy="295" r="5" fill="hsl(var(--scene-1))" />
+        <circle cx="810" cy="265" r="5" fill="hsl(var(--scene-2))" />
       </g>
 
       {/* Region pads */}
@@ -59,7 +59,7 @@ export function HeroPoster() {
           cy="475"
           rx="105"
           ry="40"
-          fill="hsl(var(--brand))"
+          fill="hsl(var(--scene-1))"
           opacity="0.22"
         />
         <ellipse
@@ -67,7 +67,7 @@ export function HeroPoster() {
           cy="385"
           rx="80"
           ry="30"
-          fill="hsl(var(--brand-2))"
+          fill="hsl(var(--scene-2))"
           opacity="0.2"
         />
         <ellipse
@@ -75,7 +75,7 @@ export function HeroPoster() {
           cy="305"
           rx="70"
           ry="26"
-          fill="hsl(var(--brand))"
+          fill="hsl(var(--scene-1))"
           opacity="0.18"
         />
         <ellipse
@@ -83,7 +83,7 @@ export function HeroPoster() {
           cy="335"
           rx="80"
           ry="30"
-          fill="hsl(var(--brand-2))"
+          fill="hsl(var(--scene-2))"
           opacity="0.2"
         />
       </g>
@@ -96,7 +96,7 @@ export function HeroPoster() {
           width="52"
           height="92"
           rx="4"
-          fill="hsl(var(--brand))"
+          fill="hsl(var(--scene-1))"
           opacity="0.85"
         />
         <rect
@@ -105,7 +105,7 @@ export function HeroPoster() {
           width="34"
           height="48"
           rx="3"
-          fill="hsl(var(--brand-2))"
+          fill="hsl(var(--scene-2))"
           opacity="0.8"
         />
         <rect
@@ -114,7 +114,7 @@ export function HeroPoster() {
           width="44"
           height="62"
           rx="4"
-          fill="hsl(var(--brand))"
+          fill="hsl(var(--scene-1))"
           opacity="0.8"
         />
         <rect
@@ -123,7 +123,7 @@ export function HeroPoster() {
           width="28"
           height="38"
           rx="3"
-          fill="hsl(var(--brand-2))"
+          fill="hsl(var(--scene-2))"
           opacity="0.75"
         />
         <rect
@@ -132,7 +132,7 @@ export function HeroPoster() {
           width="38"
           height="52"
           rx="4"
-          fill="hsl(var(--brand-2))"
+          fill="hsl(var(--scene-2))"
           opacity="0.8"
         />
         <rect
@@ -141,7 +141,7 @@ export function HeroPoster() {
           width="42"
           height="52"
           rx="4"
-          fill="hsl(var(--brand))"
+          fill="hsl(var(--scene-1))"
           opacity="0.8"
         />
       </g>

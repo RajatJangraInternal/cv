@@ -33,8 +33,10 @@ function readThemeColors(): ThemeColors {
     return `hsl(${h}, ${s}, ${l})`;
   };
   return {
-    brand: hsl("--brand", "330 92% 62%"),
-    brand2: hsl("--brand-2", "286 88% 68%"),
+    // The scene runs on its own cyan/teal tokens (--scene-*) so it stays
+    // visually separate from the magenta brand the text uses.
+    brand: hsl("--scene-1", "187 95% 58%"),
+    brand2: hsl("--scene-2", "160 90% 52%"),
     grid: hsl("--border", "330 22% 19%"),
     gridFaint: hsl("--muted", "330 22% 15%"),
     label: hsl("--muted-foreground", "330 12% 66%"),
@@ -42,8 +44,8 @@ function readThemeColors(): ThemeColors {
 }
 
 const DEFAULT_COLORS: ThemeColors = {
-  brand: "hsl(330, 92%, 62%)",
-  brand2: "hsl(286, 88%, 68%)",
+  brand: "hsl(187, 95%, 58%)",
+  brand2: "hsl(160, 90%, 52%)",
   grid: "hsl(330, 22%, 19%)",
   gridFaint: "hsl(330, 22%, 15%)",
   label: "hsl(330, 12%, 66%)",

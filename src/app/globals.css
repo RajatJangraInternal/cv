@@ -36,6 +36,11 @@
     --brand: 330 80% 45%;
     --brand-2: 286 75% 55%;
 
+    /* 3D scene accents — complementary cyan/teal, kept distinct from the
+       magenta brand so hero text always reads against the backdrop */
+    --scene-1: 187 92% 40%;
+    --scene-2: 160 84% 37%;
+
     --radius: 0.6rem;
   }
 
@@ -70,6 +75,9 @@
 
     --brand: 330 92% 62%;
     --brand-2: 286 88% 68%;
+
+    --scene-1: 187 95% 58%;
+    --scene-2: 160 90% 52%;
   }
 }
 

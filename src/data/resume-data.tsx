@@ -1,5 +1,32 @@
 import type { ResumeData } from "@/lib/types";
 
+/**
+ * Presentation-only grouping of the skills below; any skill not listed
+ * here still renders under a trailing "more" group.
+ */
+export const SKILL_GROUPS: ReadonlyArray<{
+  label: string;
+  skills: readonly string[];
+}> = [
+  { label: "cloud platforms", skills: ["Azure", "AWS", "Microsoft 365"] },
+  {
+    label: "infrastructure as code",
+    skills: ["Terraform", "Bicep", "ARM Templates"],
+  },
+  {
+    label: "containers & ci/cd",
+    skills: ["Docker", "Kubernetes", "GitHub Actions", "Azure DevOps", "CI/CD"],
+  },
+  {
+    label: "scripting & systems",
+    skills: ["PowerShell", "Python", "Bash", "Linux"],
+  },
+  {
+    label: "security & operations",
+    skills: ["IAM & RBAC", "Azure Monitor", "Networking"],
+  },
+];
+
 export const RESUME_DATA: ResumeData = {
   name: "Rajat Kumar",
   initials: "RK",
@@ -62,9 +89,9 @@ export const RESUME_DATA: ResumeData = {
               Microsoft Graph, impacting 40,000+ production deployments
             </li>
             <li>
-              Delivered live support for 100+ cloud labs across Azure AI Foundry,
-              Azure DevOps, GitHub Actions, Semantic Kernel and API Management
-              with 100% customer satisfaction
+              Delivered live support for 100+ cloud labs across Azure AI
+              Foundry, Azure DevOps, GitHub Actions, Semantic Kernel and API
+              Management with 100% customer satisfaction
             </li>
             <li>
               Led a critical incident response, provisioning 2,500 licenses in

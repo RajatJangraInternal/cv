@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { badgeVariants } from "@/components/ui/badge";
+import { BackToTop } from "@/components/back-to-top";
 import { CommandMenu } from "@/components/command-menu";
 import { CursorGlow } from "@/components/cursor-glow";
 import { Reveal } from "@/components/reveal";
+import { ScrollProgress } from "@/components/scroll-progress";
 import { SectionErrorBoundary } from "@/components/section-error-boundary";
 import { SectionSkeleton } from "@/components/section-skeleton";
+import { badgeVariants } from "@/components/ui/badge";
 import { RESUME_DATA } from "@/data/resume-data";
 import { generateResumeStructuredData } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
@@ -79,6 +81,7 @@ export default function ResumePage() {
           __html: JSON.stringify(structuredData),
         }}
       />
+      <ScrollProgress />
       <Hero />
 
       <main
@@ -215,6 +218,7 @@ export default function ResumePage() {
         </footer>
       </main>
 
+      <BackToTop />
       <CursorGlow />
     </>
   );

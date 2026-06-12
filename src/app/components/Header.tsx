@@ -1,10 +1,10 @@
 import { GlobeIcon, MailIcon, PhoneIcon } from "lucide-react";
-import React from "react";
+import type React from "react";
 import { Avatar } from "@/components/avatar";
 import { HeaderActions } from "@/components/header-actions";
-import { Button } from "@/components/ui/button";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { XIcon } from "@/components/icons/x-icon";
+import { Button } from "@/components/ui/button";
 import { RESUME_DATA } from "@/data/resume-data";
 import type { IconType } from "@/lib/types";
 
@@ -59,7 +59,12 @@ function SocialButton({ href, iconType, label }: SocialButtonProps) {
       size="icon"
       asChild={true}
     >
-      <a href={href} aria-label={label} target="_blank" rel="noopener noreferrer">
+      <a
+        href={href}
+        aria-label={label}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
         <IconComponent className="size-4" aria-hidden="true" />
       </a>
     </Button>

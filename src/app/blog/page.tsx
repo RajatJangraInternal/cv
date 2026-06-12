@@ -1,5 +1,5 @@
-import Link from "next/link";
 import fs from "fs";
+import Link from "next/link";
 import path from "path";
 
 interface PostData {

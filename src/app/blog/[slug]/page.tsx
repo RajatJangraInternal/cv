@@ -1,6 +1,6 @@
 import fs from "fs";
-import path from "path";
 import { notFound } from "next/navigation";
+import path from "path";
 import React from "react";
 
 interface PostData {

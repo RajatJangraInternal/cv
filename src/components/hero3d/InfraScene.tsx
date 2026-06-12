@@ -564,13 +564,11 @@ function Arc({
     }
     const draw = Math.min(since / ARC_DRAW_MS, 1);
     mat.opacity = 0.12 + draw * 0.45;
-    if (since < ARC_DRAW_MS * 2) {
-      pulse.visible = true;
-      const t = (since / ARC_DRAW_MS) % 1;
-      curve.getPoint(t, pulse.position);
-    } else {
-      pulse.visible = false;
-    }
+    // Live-infrastructure heartbeat: the pulse keeps traveling for as
+    // long as the arc exists.
+    pulse.visible = true;
+    const t = (since / ARC_DRAW_MS) % 1;
+    curve.getPoint(t, pulse.position);
   });
 
   const tube = React.useMemo(() => {

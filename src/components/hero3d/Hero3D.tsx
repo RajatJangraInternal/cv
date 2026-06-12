@@ -2,7 +2,6 @@
 
 import dynamic from "next/dynamic";
 import React from "react";
-import { subscribeApply } from "./apply-bus";
 import { HeroPoster } from "./HeroPoster";
 
 const InfraScene = dynamic(() => import("./InfraScene"), {
@@ -56,24 +55,21 @@ class SceneErrorBoundary extends React.Component<
   }
 }
 
-/** How long the scene keeps animating after each kind of event. */
-const SETTLE_AFTER_COMPLETE_MS = 3000;
-const SETTLE_AFTER_FOCUS_MS = 2500;
-
 /**
  * The site's 3D backdrop. Stage 3 made it a fixed layer: it fills the
  * viewport behind the hero AND the scrolled resume content (fading as you
  * leave the hero), so section-focus events stay visible. Poster always
  * renders (SSR base layer); the 3D scene mounts on top when the gate
  * passes. All failure modes (gate, chunk load, WebGL context loss) leave
- * the poster showing. Idle battery cost is near zero: the frameloop drops
- * to demand-rendering whenever nothing is animating.
+ * the poster showing. The frameloop runs continuously (user decision,
+ * superseding the design doc's settle-to-demand policy): the scene is
+ * meant to feel like live infrastructure, and browsers throttle rAF in
+ * hidden tabs so the background cost stays bounded.
  */
 export function Hero3D() {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [mode, setMode] = React.useState<"poster" | "3d">("poster");
   const [sceneReady, setSceneReady] = React.useState(false);
-  const [playing, setPlaying] = React.useState(true);
 
   React.useEffect(() => {
     if (deviceSupports3D()) setMode("3d");
@@ -103,32 +99,6 @@ export function Hero3D() {
     };
   }, []);
 
-  // Frameloop policy: animate while the apply/destroy sequence runs or a
-  // section focus is settling, then drop to demand-rendering.
-  React.useEffect(() => {
-    let settleTimer = 0;
-    const unsubscribe = subscribeApply((event) => {
-      clearTimeout(settleTimer);
-      setPlaying(true);
-      if (event.type === "complete" || event.type === "destroyed") {
-        settleTimer = window.setTimeout(
-          () => setPlaying(false),
-          SETTLE_AFTER_COMPLETE_MS
-        );
-      } else if (event.type === "focus") {
-        settleTimer = window.setTimeout(
-          () => setPlaying(false),
-          SETTLE_AFTER_FOCUS_MS
-        );
-      }
-    });
-    return () => {
-      clearTimeout(settleTimer);
-      unsubscribe();
-    };
-  }, []);
-
-  const frameloop = playing ? "always" : "demand";
   const degrade = React.useCallback(() => {
     setSceneReady(false);
     setMode("poster");
@@ -153,7 +123,7 @@ export function Hero3D() {
       {mode === "3d" && (
         <SceneErrorBoundary onFail={degrade}>
           <InfraScene
-            frameloop={frameloop}
+            frameloop="always"
             onContextLost={degrade}
             onReady={ready}
           />

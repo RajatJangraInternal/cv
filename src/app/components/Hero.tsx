@@ -2,6 +2,8 @@
 
 import { ArrowDownIcon, FileDownIcon, MailIcon } from "lucide-react";
 import React from "react";
+import { ApplyTerminal } from "@/components/hero3d/ApplyTerminal";
+import { Hero3D } from "@/components/hero3d/Hero3D";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { RESUME_DATA } from "@/data/resume-data";
@@ -136,207 +138,6 @@ function TypedRole() {
 }
 
 /* ------------------------------------------------------------------ */
-/* Canvas backdrop: particle torus knot + starfield                    */
-/* ------------------------------------------------------------------ */
-
-function readHslVar(name: string) {
-  const raw = getComputedStyle(document.documentElement)
-    .getPropertyValue(name)
-    .trim();
-  return raw || "199 89% 55%";
-}
-
-function HeroCanvas() {
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
-
-  React.useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    let brand = readHslVar("--brand");
-    let brand2 = readHslVar("--brand-2");
-    let fg = readHslVar("--foreground");
-
-    // Re-read theme colors when the dark class flips.
-    const themeObserver = new MutationObserver(() => {
-      brand = readHslVar("--brand");
-      brand2 = readHslVar("--brand-2");
-      fg = readHslVar("--foreground");
-    });
-    themeObserver.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    let width = 0;
-    let height = 0;
-
-    const resize = () => {
-      width = canvas.clientWidth;
-      height = canvas.clientHeight;
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
-      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    // Torus-knot sample points (p=2, q=3) with per-point jitter.
-    const KNOT_POINTS = 320;
-    const knot = Array.from({ length: KNOT_POINTS }, (_, i) => {
-      const t = (i / KNOT_POINTS) * Math.PI * 2;
-      return {
-        t,
-        jitter: (Math.random() - 0.5) * 0.06,
-      };
-    });
-
-    const STAR_COUNT = 110;
-    const stars = Array.from({ length: STAR_COUNT }, () => ({
-      x: Math.random(),
-      y: Math.random(),
-      r: Math.random() * 1.3 + 0.3,
-      phase: Math.random() * Math.PI * 2,
-      speed: Math.random() * 0.8 + 0.4,
-    }));
-
-    // Bright pulses that travel along the knot.
-    const pulses = [0, 0.33, 0.66].map((offset) => ({ offset }));
-
-    const project = (
-      t: number,
-      jitter: number,
-      rotX: number,
-      rotY: number,
-      scale: number
-    ) => {
-      const r = 2 + Math.cos(3 * t) + jitter;
-      let x = r * Math.cos(2 * t);
-      let y = r * Math.sin(2 * t);
-      let z = Math.sin(3 * t) + jitter;
-
-      // rotate around Y
-      const cy = Math.cos(rotY);
-      const sy = Math.sin(rotY);
-      [x, z] = [x * cy - z * sy, x * sy + z * cy];
-      // rotate around X
-      const cx = Math.cos(rotX);
-      const sx = Math.sin(rotX);
-      [y, z] = [y * cx - z * sx, y * sx + z * cx];
-
-      const persp = 5 / (5 + z);
-      return {
-        x: width / 2 + x * scale * persp,
-        y: height / 2 + y * scale * persp,
-        depth: persp, // ~0.8 (far) .. ~1.25 (near)
-      };
-    };
-
-    let raf = 0;
-    let running = true;
-
-    const draw = (now: number) => {
-      const time = now / 1000;
-      ctx.clearRect(0, 0, width, height);
-
-      // Starfield
-      for (const s of stars) {
-        const tw = 0.35 + 0.65 * Math.abs(Math.sin(time * s.speed + s.phase));
-        ctx.beginPath();
-        ctx.arc(s.x * width, s.y * height, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${fg} / ${0.16 * tw})`;
-        ctx.fill();
-      }
-
-      const rotX = time * 0.12 + 0.5;
-      const rotY = time * 0.18;
-      const scale = Math.min(width, height) / 7.5;
-
-      // Wireframe segments between consecutive knot points
-      for (let i = 0; i < knot.length; i++) {
-        const a = knot[i];
-        const b = knot[(i + 1) % knot.length];
-        const pa = project(a.t, a.jitter, rotX, rotY, scale);
-        const pb = project(b.t, b.jitter, rotX, rotY, scale);
-        const depth = (pa.depth + pb.depth) / 2;
-        const alpha = 0.05 + (depth - 0.8) * 0.45;
-        const color = i % 2 === 0 ? brand : brand2;
-        ctx.beginPath();
-        ctx.moveTo(pa.x, pa.y);
-        ctx.lineTo(pb.x, pb.y);
-        ctx.strokeStyle = `hsla(${color} / ${Math.max(alpha, 0.04)})`;
-        ctx.lineWidth = depth;
-        ctx.stroke();
-      }
-
-      // Knot particles
-      for (let i = 0; i < knot.length; i += 2) {
-        const k = knot[i];
-        const p = project(k.t, k.jitter, rotX, rotY, scale);
-        const alpha = 0.1 + (p.depth - 0.8) * 0.9;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.depth * 1.2, 0, Math.PI * 2);
-        ctx.fillStyle = `hsla(${i % 4 === 0 ? brand2 : brand} / ${alpha})`;
-        ctx.fill();
-      }
-
-      // Traveling pulses with glow
-      for (const pulse of pulses) {
-        const t = ((time * 0.07 + pulse.offset) % 1) * Math.PI * 2;
-        const p = project(t, 0, rotX, rotY, scale);
-        const glow = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, 14);
-        glow.addColorStop(0, `hsla(${brand} / 0.9)`);
-        glow.addColorStop(1, `hsla(${brand} / 0)`);
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, 14, 0, Math.PI * 2);
-        ctx.fillStyle = glow;
-        ctx.fill();
-      }
-
-      if (running && !reduced) raf = requestAnimationFrame(draw);
-    };
-
-    // Pause the animation while the hero is off-screen.
-    const visObserver = new IntersectionObserver(([entry]) => {
-      const visible = entry.isIntersecting;
-      if (visible && !running) {
-        running = true;
-        if (!reduced) raf = requestAnimationFrame(draw);
-      } else if (!visible) {
-        running = false;
-        cancelAnimationFrame(raf);
-      }
-    });
-    visObserver.observe(canvas);
-
-    raf = requestAnimationFrame(draw);
-
-    return () => {
-      running = false;
-      cancelAnimationFrame(raf);
-      window.removeEventListener("resize", resize);
-      themeObserver.disconnect();
-      visObserver.disconnect();
-    };
-  }, []);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      className="absolute inset-0 size-full"
-      aria-hidden="true"
-    />
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* Terminal status chip (bottom-left)                                  */
 /* ------------------------------------------------------------------ */
 
@@ -383,7 +184,7 @@ export function Hero() {
       className="relative flex min-h-[100svh] flex-col overflow-hidden print:hidden"
       aria-label="Introduction"
     >
-      <HeroCanvas />
+      <Hero3D />
 
       {/* Soft vignette so text stays readable over the canvas */}
       <div
@@ -555,12 +356,15 @@ export function Hero() {
         </ul>
       </div>
 
-      {/* Bottom bar */}
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl items-end justify-between px-5 pb-5">
-        <SystemStatus />
+      {/* Bottom bar: live terraform apply narrating the 3D scene */}
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-3 px-5 pb-5 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex flex-col items-start gap-2">
+          <ApplyTerminal />
+          <SystemStatus />
+        </div>
         <a
           href="#about-section"
-          className="group flex flex-col items-center gap-1 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground transition-colors hover:text-brand"
+          className="group flex flex-col items-center gap-1 self-center font-mono text-[10px] uppercase tracking-[0.3em] text-muted-foreground transition-colors hover:text-brand sm:self-end"
           aria-label="Scroll to resume"
         >
           Scroll
@@ -569,7 +373,6 @@ export function Hero() {
             aria-hidden="true"
           />
         </a>
-        <div className="w-[140px]" aria-hidden="true" />
       </div>
     </section>
   );

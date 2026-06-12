@@ -1,3 +1,5 @@
+import { RESUME_DATA } from "@/data/resume-data";
+
 /**
  * Scene config + terraform-apply script for the IaC Resume Engine hero.
  *
@@ -6,8 +8,25 @@
  * line finishes typing. Arc endpoints are predefined here; an arc event's
  * `target` is the arc's id.
  *
- * All resource names map to real facts in resume-data.tsx.
+ * Counts come straight from RESUME_DATA — the same object the /graphql
+ * endpoint re-exports — so the terminal's "synced from /graphql" claim
+ * holds without a build-time self-query (per the design doc).
  */
+
+const CERT_COUNT = RESUME_DATA.certifications.length;
+
+/** Whole years since the first role (Mar 2024) in resume-data. */
+const CAREER_YEARS = Math.max(
+  1,
+  Math.floor(
+    (Date.now() - new Date(2024, 2, 1).getTime()) /
+      (365.25 * 24 * 60 * 60 * 1000)
+  )
+);
+
+/** Real deploy hash when Vercel exposes system env vars; dev fallback. */
+const DEPLOY_SHA =
+  process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? "local-dev";
 
 export interface SceneRegion {
   id: string;
@@ -37,7 +56,14 @@ export interface SceneArc {
 }
 
 export interface ApplyEvent {
-  type: "spawn" | "arc" | "pulse" | "complete" | "despawn" | "destroyed";
+  type:
+    | "spawn"
+    | "arc"
+    | "pulse"
+    | "complete"
+    | "despawn"
+    | "destroyed"
+    | "focus";
   target: string;
 }
 
@@ -130,6 +156,7 @@ export const SCENE_ARCS: readonly SceneArc[] = [
 export const APPLY_SCRIPT: readonly ApplyStep[] = [
   { line: "$ terraform apply -auto-approve", delayMs: 600 },
   { line: "Initializing provider plugins: azurerm, aws...", delayMs: 700 },
+  { line: "state: synced from rajat.cloud/graphql", delayMs: 550 },
   { line: "Plan: 12 to add, 0 to change, 0 to destroy.", delayMs: 900 },
   {
     line: "azurerm_resource_group.career: Creating...",
@@ -177,7 +204,7 @@ export const APPLY_SCRIPT: readonly ApplyStep[] = [
     event: { type: "arc", target: "arc:central-india->west-europe" },
   },
   {
-    line: "microsoft_certification.expert[7]: Creation complete after 0.4s",
+    line: `microsoft_certification.expert[${CERT_COUNT}]: Creation complete after 0.4s`,
     delayMs: 650,
     event: { type: "spawn", target: "res:certs" },
   },
@@ -192,11 +219,31 @@ export const APPLY_SCRIPT: readonly ApplyStep[] = [
     event: { type: "spawn", target: "res:automation" },
   },
   {
-    line: "Apply complete! Resources: 7 certifications, 2 clouds, 2 years added.",
+    line: `Apply complete! Resources: ${CERT_COUNT} certifications, 2 clouds, ${CAREER_YEARS} years added.`,
     delayMs: 400,
     event: { type: "complete", target: "scene" },
   },
+  {
+    line: `release: ${DEPLOY_SHA} · git push -> vercel · rajat.cloud`,
+    delayMs: 600,
+  },
 ] as const;
+
+/**
+ * Resume sections -> scene targets. Scrolling a section into view emits a
+ * focus event: the camera leans toward the target and it pulses.
+ */
+export const SECTION_FOCUS: ReadonlyArray<{
+  sectionId: string;
+  target: string;
+}> = [
+  { sectionId: "about-section", target: "region:central-india" },
+  { sectionId: "skills-section", target: "res:automation" },
+  { sectionId: "work-experience", target: "res:career" },
+  { sectionId: "certifications-section", target: "res:certs" },
+  { sectionId: "side-projects", target: "res:pipelines" },
+  { sectionId: "education-section", target: "res:labs" },
+];
 
 /**
  * The destroy easter egg (Cmd/Ctrl+J -> "terraform destroy"). Tears the

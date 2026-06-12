@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { BackToTop } from "@/components/back-to-top";
 import { CommandMenu } from "@/components/command-menu";
 import { CursorGlow } from "@/components/cursor-glow";
+import { SectionSpy } from "@/components/hero3d/SectionSpy";
 import { Reveal } from "@/components/reveal";
 import { ScrollProgress } from "@/components/scroll-progress";
 import { SectionErrorBoundary } from "@/components/section-error-boundary";
@@ -220,6 +221,7 @@ export default function ResumePage() {
 
       <BackToTop />
       <CursorGlow />
+      <SectionSpy />
     </>
   );
 }

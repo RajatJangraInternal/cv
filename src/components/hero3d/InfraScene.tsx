@@ -197,13 +197,13 @@ function RegionLabel({
 function GlassPlatform({
   regionId,
   label,
-  anims,
+  pulses,
   color,
   labelColor,
 }: {
   regionId: string;
   label: string;
-  anims: AnimMap;
+  pulses: AnimMap;
   color: string;
   labelColor: string;
 }) {
@@ -213,7 +213,7 @@ function GlassPlatform({
   useFrame(() => {
     const ring = ringRef.current;
     if (!ring) return;
-    const entry = anims[regionId];
+    const entry = pulses[regionId];
     const since = entry ? performance.now() - entry.t : Number.MAX_VALUE;
     const pulse = since < PULSE_MS ? 1 - since / PULSE_MS : 0;
     ring.emissiveIntensity = 0.7 + pulse * 2.4;
@@ -466,15 +466,20 @@ const FORMS: Record<
   ring: RingForm,
 };
 
-/** Handles spawn/despawn scaling and the spawn flash for any form. */
+/**
+ * Handles spawn/despawn scaling plus the emissive flash for any form —
+ * fired both by its own spawn and by section-focus pulses.
+ */
 function ResourceNode({
   resource,
   anims,
+  pulses,
   color,
   altColor,
 }: {
   resource: SceneResource;
   anims: AnimMap;
+  pulses: AnimMap;
   color: string;
   altColor: string;
 }) {
@@ -491,7 +496,8 @@ function ResourceNode({
     const entry = anims[resource.id];
     const s = Math.max(presence(entry, now), 0.0001);
     group.scale.setScalar(s);
-    applyFlash(group, flash(entry, now));
+    const glow = Math.max(flash(entry, now), flash(pulses[resource.id], now));
+    applyFlash(group, glow);
   });
 
   const Form = FORMS[resource.kind];
@@ -654,17 +660,23 @@ function CameraRig() {
 /* ------------------------------------------------------------------ */
 
 function Topology({ colors }: { colors: ThemeColors }) {
+  // Presence (spawn/despawn/arc) and transient pulses (region pulse +
+  // section focus) are tracked separately so a focus never re-runs a
+  // spawn animation.
   const [anims, setAnims] = React.useState<AnimMap>({});
+  const [pulses, setPulses] = React.useState<AnimMap>({});
 
   React.useEffect(
     () =>
       subscribeApply((event: ApplyEvent) => {
         if (event.type === "complete" || event.type === "destroyed") return;
-        const dir = event.type === "despawn" ? -1 : 1;
-        setAnims((prev) => ({
-          ...prev,
-          [event.target]: { t: performance.now(), dir },
-        }));
+        const entry: AnimEntry = { t: performance.now(), dir: 1 };
+        if (event.type === "pulse" || event.type === "focus") {
+          setPulses((prev) => ({ ...prev, [event.target]: entry }));
+          return;
+        }
+        if (event.type === "despawn") entry.dir = -1;
+        setAnims((prev) => ({ ...prev, [event.target]: entry }));
       }),
     []
   );
@@ -684,7 +696,7 @@ function Topology({ colors }: { colors: ThemeColors }) {
           key={region.id}
           regionId={region.id}
           label={region.label}
-          anims={anims}
+          pulses={pulses}
           color={i % 2 === 0 ? colors.brand : colors.brand2}
           labelColor={colors.label}
         />
@@ -694,6 +706,7 @@ function Topology({ colors }: { colors: ThemeColors }) {
           key={resource.id}
           resource={resource}
           anims={anims}
+          pulses={pulses}
           color={i % 2 === 0 ? colors.brand : colors.brand2}
           altColor={i % 2 === 0 ? colors.brand2 : colors.brand}
         />

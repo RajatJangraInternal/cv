@@ -56,43 +56,70 @@ class SceneErrorBoundary extends React.Component<
   }
 }
 
+/** How long the scene keeps animating after each kind of event. */
+const SETTLE_AFTER_COMPLETE_MS = 3000;
+const SETTLE_AFTER_FOCUS_MS = 2500;
+
 /**
- * The hero backdrop: poster always (SSR base layer), 3D scene mounted on
- * top when the gate passes, faded in once running. All failure modes
- * (gate, chunk load, WebGL context loss) leave the poster showing.
+ * The site's 3D backdrop. Stage 3 made it a fixed layer: it fills the
+ * viewport behind the hero AND the scrolled resume content (fading as you
+ * leave the hero), so section-focus events stay visible. Poster always
+ * renders (SSR base layer); the 3D scene mounts on top when the gate
+ * passes. All failure modes (gate, chunk load, WebGL context loss) leave
+ * the poster showing. Idle battery cost is near zero: the frameloop drops
+ * to demand-rendering whenever nothing is animating.
  */
 export function Hero3D() {
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [mode, setMode] = React.useState<"poster" | "3d">("poster");
   const [sceneReady, setSceneReady] = React.useState(false);
-  const [onScreen, setOnScreen] = React.useState(true);
   const [playing, setPlaying] = React.useState(true);
 
   React.useEffect(() => {
     if (deviceSupports3D()) setMode("3d");
   }, []);
 
-  // Suspend rendering entirely while the hero is scrolled away.
+  // Fade the backdrop as the resume scrolls over it (readability first).
   React.useEffect(() => {
     const el = containerRef.current;
     if (!el) return;
-    const observer = new IntersectionObserver(([entry]) =>
-      setOnScreen(entry.isIntersecting)
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+    let raf = 0;
+    const update = () => {
+      const vh = window.innerHeight || 1;
+      const p = Math.min(window.scrollY / vh, 1);
+      el.style.opacity = String(1 - p * 0.68);
+    };
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
   }, []);
 
-  // Frameloop policy: animate while the apply sequence is running (and a
-  // short settle after "complete"), then drop to demand-rendering.
+  // Frameloop policy: animate while the apply/destroy sequence runs or a
+  // section focus is settling, then drop to demand-rendering.
   React.useEffect(() => {
     let settleTimer = 0;
     const unsubscribe = subscribeApply((event) => {
+      clearTimeout(settleTimer);
+      setPlaying(true);
       if (event.type === "complete" || event.type === "destroyed") {
-        settleTimer = window.setTimeout(() => setPlaying(false), 3000);
-      } else {
-        clearTimeout(settleTimer);
-        setPlaying(true);
+        settleTimer = window.setTimeout(
+          () => setPlaying(false),
+          SETTLE_AFTER_COMPLETE_MS
+        );
+      } else if (event.type === "focus") {
+        settleTimer = window.setTimeout(
+          () => setPlaying(false),
+          SETTLE_AFTER_FOCUS_MS
+        );
       }
     });
     return () => {
@@ -101,7 +128,7 @@ export function Hero3D() {
     };
   }, []);
 
-  const frameloop = !onScreen ? "never" : playing ? "always" : "demand";
+  const frameloop = playing ? "always" : "demand";
   const degrade = React.useCallback(() => {
     setSceneReady(false);
     setMode("poster");
@@ -111,7 +138,11 @@ export function Hero3D() {
   const posterVisible = mode !== "3d" || !sceneReady;
 
   return (
-    <div ref={containerRef} className="absolute inset-0" aria-hidden="true">
+    <div
+      ref={containerRef}
+      className="pointer-events-none fixed inset-0"
+      aria-hidden="true"
+    >
       <div
         className={`absolute inset-0 transition-opacity duration-700 ${
           posterVisible ? "opacity-100" : "opacity-0"

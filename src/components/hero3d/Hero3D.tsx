@@ -88,7 +88,7 @@ export function Hero3D() {
   React.useEffect(() => {
     let settleTimer = 0;
     const unsubscribe = subscribeApply((event) => {
-      if (event.type === "complete") {
+      if (event.type === "complete" || event.type === "destroyed") {
         settleTimer = window.setTimeout(() => setPlaying(false), 3000);
       } else {
         clearTimeout(settleTimer);

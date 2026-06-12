@@ -21,3 +21,26 @@ export function emitApply(event: ApplyEvent): void {
     listener(event);
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Control channel: UI -> terminal (e.g. the Cmd+J destroy easter egg) */
+/* ------------------------------------------------------------------ */
+
+export type ControlSignal = "destroy";
+
+type ControlListener = (signal: ControlSignal) => void;
+
+const controlListeners = new Set<ControlListener>();
+
+export function subscribeControl(listener: ControlListener): () => void {
+  controlListeners.add(listener);
+  return () => {
+    controlListeners.delete(listener);
+  };
+}
+
+export function emitControl(signal: ControlSignal): void {
+  for (const listener of controlListeners) {
+    listener(signal);
+  }
+}

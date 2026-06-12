@@ -21,12 +21,12 @@ export interface SceneResource {
   id: string;
   /** Region the resource spawns in. */
   region: string;
-  /** Primitive used by the Stage 1 scene. */
-  shape: "box" | "cylinder";
+  /** Stylized form rendered by the Stage 2 scene. */
+  kind: "tower" | "rack" | "conduit" | "cluster" | "badge" | "ring";
   /** Offset from the region anchor. */
   dx: number;
   dz: number;
-  /** Height of the primitive (visual weight = importance). */
+  /** Height of the form (visual weight = importance). */
   h: number;
 }
 
@@ -37,7 +37,7 @@ export interface SceneArc {
 }
 
 export interface ApplyEvent {
-  type: "spawn" | "arc" | "pulse" | "complete";
+  type: "spawn" | "arc" | "pulse" | "complete" | "despawn" | "destroyed";
   target: string;
 }
 
@@ -58,7 +58,7 @@ export const SCENE_RESOURCES: readonly SceneResource[] = [
   {
     id: "res:career",
     region: "region:central-india",
-    shape: "cylinder",
+    kind: "tower",
     dx: 0,
     dz: 0,
     h: 1.6,
@@ -66,7 +66,7 @@ export const SCENE_RESOURCES: readonly SceneResource[] = [
   {
     id: "res:labs",
     region: "region:east-us",
-    shape: "box",
+    kind: "rack",
     dx: 0.4,
     dz: 0.3,
     h: 1.2,
@@ -74,7 +74,7 @@ export const SCENE_RESOURCES: readonly SceneResource[] = [
   {
     id: "res:pipelines",
     region: "region:west-europe",
-    shape: "box",
+    kind: "conduit",
     dx: -0.3,
     dz: 0.4,
     h: 1.0,
@@ -82,7 +82,7 @@ export const SCENE_RESOURCES: readonly SceneResource[] = [
   {
     id: "res:hackathons",
     region: "region:southeast-asia",
-    shape: "box",
+    kind: "cluster",
     dx: 0.2,
     dz: -0.4,
     h: 0.9,
@@ -90,7 +90,7 @@ export const SCENE_RESOURCES: readonly SceneResource[] = [
   {
     id: "res:certs",
     region: "region:central-india",
-    shape: "cylinder",
+    kind: "badge",
     dx: 1.3,
     dz: 0.8,
     h: 0.8,
@@ -98,7 +98,7 @@ export const SCENE_RESOURCES: readonly SceneResource[] = [
   {
     id: "res:automation",
     region: "region:east-us",
-    shape: "cylinder",
+    kind: "ring",
     dx: -0.8,
     dz: -0.5,
     h: 0.7,
@@ -195,5 +195,65 @@ export const APPLY_SCRIPT: readonly ApplyStep[] = [
     line: "Apply complete! Resources: 7 certifications, 2 clouds, 2 years added.",
     delayMs: 400,
     event: { type: "complete", target: "scene" },
+  },
+] as const;
+
+/**
+ * The destroy easter egg (Cmd/Ctrl+J -> "terraform destroy"). Tears the
+ * scene down resource by resource; the terminal auto-reapplies afterwards
+ * so the hero never stays empty.
+ */
+export const DESTROY_SCRIPT: readonly ApplyStep[] = [
+  { line: "$ terraform destroy -auto-approve", delayMs: 400 },
+  { line: "Plan: 0 to add, 0 to change, 12 to destroy.", delayMs: 800 },
+  {
+    line: "powershell_automation.graph_migration[60]: Destroying...",
+    delayMs: 450,
+    event: { type: "despawn", target: "res:automation" },
+  },
+  {
+    line: "peering: central-india <-> southeast-asia: Released",
+    delayMs: 420,
+    event: { type: "despawn", target: "arc:central-india->southeast-asia" },
+  },
+  {
+    line: "microsoft_certification.expert[7]: Destroyed (revoke failed: permanent)",
+    delayMs: 480,
+    event: { type: "despawn", target: "res:certs" },
+  },
+  {
+    line: "peering: central-india <-> west-europe: Released",
+    delayMs: 420,
+    event: { type: "despawn", target: "arc:central-india->west-europe" },
+  },
+  {
+    line: "module.hackathons[30]: Destroyed",
+    delayMs: 450,
+    event: { type: "despawn", target: "res:hackathons" },
+  },
+  {
+    line: "aws_codepipeline.deployments[40000]: Destroyed",
+    delayMs: 450,
+    event: { type: "despawn", target: "res:pipelines" },
+  },
+  {
+    line: "peering: central-india <-> east-us: Released",
+    delayMs: 420,
+    event: { type: "despawn", target: "arc:central-india->east-us" },
+  },
+  {
+    line: "module.cloud_labs[100]: Destroyed",
+    delayMs: 450,
+    event: { type: "despawn", target: "res:labs" },
+  },
+  {
+    line: "azurerm_resource_group.career: Destroyed",
+    delayMs: 500,
+    event: { type: "despawn", target: "res:career" },
+  },
+  {
+    line: "Destroy complete! Resources: 12 destroyed. Re-provisioning in 3s...",
+    delayMs: 400,
+    event: { type: "destroyed", target: "scene" },
   },
 ] as const;

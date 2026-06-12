@@ -2,59 +2,112 @@
 
 import { RotateCcwIcon } from "lucide-react";
 import React from "react";
-import { APPLY_SCRIPT } from "@/data/deployments";
-import { emitApply } from "./apply-bus";
+import {
+  APPLY_SCRIPT,
+  type ApplyStep,
+  DESTROY_SCRIPT,
+} from "@/data/deployments";
+import { emitApply, subscribeControl } from "./apply-bus";
 
 function lineTone(line: string): string {
   if (line.startsWith("$")) return "text-foreground";
   if (line.includes("Apply complete")) return "text-emerald-400";
-  if (line.includes("Creation complete") || line.includes("Established"))
+  if (line.includes("Destroy complete")) return "text-red-400";
+  if (line.includes("Destroyed") || line.includes("Destroying"))
+    return "text-red-400/80";
+  if (
+    line.includes("Creation complete") ||
+    line.includes("Established") ||
+    line.includes("Released")
+  )
     return "text-brand";
   return "text-muted-foreground";
 }
 
+interface TerminalJob {
+  script: readonly ApplyStep[];
+  /** Monotonic counter so identical scripts can re-run. */
+  n: number;
+}
+
+const REBUILD_DELAY_MS = 3000;
+
 /**
- * Terminal panel that streams the terraform-apply script line by line and
- * emits each step's scene event when its line lands. Works identically on
- * the 3D and poster paths (the scene simply may not be listening).
+ * Terminal panel that streams the terraform apply/destroy scripts line by
+ * line and emits each step's scene event when its line lands. The destroy
+ * easter egg (command menu) swaps the script; after a destroy finishes the
+ * apply auto-reruns so the scene never stays empty.
  *
  * Reduced-motion users get the full transcript instantly (events fire at
  * once so the scene, if active, settles into its final state).
  */
 export function ApplyTerminal() {
+  const [job, setJob] = React.useState<TerminalJob>({
+    script: APPLY_SCRIPT,
+    n: 0,
+  });
   const [visibleCount, setVisibleCount] = React.useState(0);
-  const [run, setRun] = React.useState(0);
-  const done = visibleCount >= APPLY_SCRIPT.length;
+  const done = visibleCount >= job.script.length;
+  const destroying = job.script === DESTROY_SCRIPT;
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `run` is the replay trigger — the effect restarts the sequence when it changes.
+  // The command-menu easter egg routes through the control channel.
+  React.useEffect(
+    () =>
+      subscribeControl((signal) => {
+        if (signal === "destroy") {
+          setJob((prev) =>
+            prev.script === DESTROY_SCRIPT
+              ? prev
+              : { script: DESTROY_SCRIPT, n: prev.n + 1 },
+          );
+        }
+      }),
+    [],
+  );
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `job` is the run trigger — each new job restarts the sequence.
   React.useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setVisibleCount(APPLY_SCRIPT.length);
-      for (const step of APPLY_SCRIPT) {
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    let timer = 0;
+
+    const scheduleRebuild = () => {
+      timer = window.setTimeout(
+        () => setJob((prev) => ({ script: APPLY_SCRIPT, n: prev.n + 1 })),
+        reduced ? 1500 : REBUILD_DELAY_MS,
+      );
+    };
+
+    if (reduced) {
+      setVisibleCount(job.script.length);
+      for (const step of job.script) {
         if (step.event) emitApply(step.event);
       }
-      return;
+      if (job.script === DESTROY_SCRIPT) scheduleRebuild();
+      return () => clearTimeout(timer);
     }
 
     setVisibleCount(0);
     let index = 0;
-    let timer = 0;
 
     const next = () => {
-      const step = APPLY_SCRIPT[index];
+      const step = job.script[index];
       if (!step) return;
       setVisibleCount(index + 1);
       if (step.event) emitApply(step.event);
       index += 1;
-      if (index < APPLY_SCRIPT.length) {
-        timer = window.setTimeout(next, APPLY_SCRIPT[index].delayMs);
+      if (index < job.script.length) {
+        timer = window.setTimeout(next, job.script[index].delayMs);
+      } else if (job.script === DESTROY_SCRIPT) {
+        scheduleRebuild();
       }
     };
 
-    timer = window.setTimeout(next, APPLY_SCRIPT[0].delayMs);
+    timer = window.setTimeout(next, job.script[0].delayMs);
     return () => clearTimeout(timer);
-  }, [run]);
+  }, [job]);
 
   // Keep the latest line in view inside the fixed-height panel.
   // biome-ignore lint/correctness/useExhaustiveDependencies: `visibleCount` triggers the scroll after each new line renders.
@@ -72,14 +125,16 @@ export function ApplyTerminal() {
           <span className="size-2 rounded-full bg-emerald-400/80" />
         </span>
         <span className="ml-1 truncate font-mono text-[10px] text-muted-foreground">
-          ~/rajat-kumar/infra — terraform
+          ~/rajat-kumar/infra — terraform{destroying ? " destroy" : ""}
         </span>
         <button
           type="button"
-          onClick={() => setRun((n) => n + 1)}
+          onClick={() =>
+            setJob((prev) => ({ script: APPLY_SCRIPT, n: prev.n + 1 }))
+          }
           aria-label="Replay deployment"
           className={`ml-auto inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[10px] text-brand transition-opacity hover:bg-brand/10 ${
-            done ? "opacity-100" : "pointer-events-none opacity-0"
+            done && !destroying ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
         >
           <RotateCcwIcon className="size-3" aria-hidden="true" />
@@ -92,7 +147,7 @@ export function ApplyTerminal() {
         aria-live="polite"
         className="h-40 overflow-hidden px-3 py-2 font-mono text-[11px] leading-relaxed sm:h-44"
       >
-        {APPLY_SCRIPT.slice(0, visibleCount).map((step) => (
+        {job.script.slice(0, visibleCount).map((step) => (
           <p key={step.line} className={lineTone(step.line)}>
             {step.line}
           </p>

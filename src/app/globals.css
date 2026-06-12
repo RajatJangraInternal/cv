@@ -4,72 +4,80 @@
 
 @layer base {
   :root {
-    --background: 210 40% 99%;
-    --foreground: 222 47% 11%;
+    --background: 330 40% 99%;
+    --foreground: 330 30% 9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 330 30% 9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
+    --popover-foreground: 330 30% 9%;
 
-    --primary: 222 47% 11%;
-    --primary-foreground: 210 20% 98%;
+    --primary: 330 30% 11%;
+    --primary-foreground: 330 30% 98%;
 
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 222 47% 11%;
+    --secondary: 330 30% 95%;
+    --secondary-foreground: 330 30% 11%;
 
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 330 30% 95%;
+    --muted-foreground: 330 10% 45%;
 
-    --accent: 199 89% 48%;
+    --accent: 330 80% 45%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 20% 98%;
+    --destructive-foreground: 330 20% 98%;
 
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 199 89% 48%;
+    --border: 330 25% 88%;
+    --input: 330 25% 88%;
+    --ring: 330 80% 45%;
 
-    /* Brand accent (cloud blue) */
-    --brand: 199 89% 48%;
-    --brand-2: 217 91% 60%;
+    /* Brand accent (neobrutalist magenta) */
+    --brand: 330 80% 45%;
+    --brand-2: 286 75% 55%;
+
+    /* 3D scene accents — complementary cyan/teal, kept distinct from the
+       magenta brand so hero text always reads against the backdrop */
+    --scene-1: 187 92% 40%;
+    --scene-2: 160 84% 37%;
 
     --radius: 0.6rem;
   }
 
   .dark {
-    --background: 222 47% 7%;
-    --foreground: 210 40% 96%;
+    --background: 330 35% 6%;
+    --foreground: 330 25% 96%;
 
-    --card: 222 44% 10%;
-    --card-foreground: 210 40% 96%;
+    --card: 330 30% 9%;
+    --card-foreground: 330 25% 96%;
 
-    --popover: 222 44% 10%;
-    --popover-foreground: 210 40% 96%;
+    --popover: 330 30% 9%;
+    --popover-foreground: 330 25% 96%;
 
-    --primary: 210 40% 96%;
-    --primary-foreground: 222 47% 11%;
+    --primary: 330 25% 96%;
+    --primary-foreground: 330 30% 11%;
 
-    --secondary: 217 33% 16%;
-    --secondary-foreground: 210 40% 96%;
+    --secondary: 330 22% 15%;
+    --secondary-foreground: 330 25% 96%;
 
-    --muted: 217 33% 16%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 330 22% 15%;
+    --muted-foreground: 330 12% 66%;
 
-    --accent: 199 89% 52%;
-    --accent-foreground: 222 47% 7%;
+    --accent: 330 90% 60%;
+    --accent-foreground: 330 35% 6%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
+    --destructive-foreground: 330 20% 98%;
 
-    --border: 217 33% 20%;
-    --input: 217 33% 20%;
-    --ring: 199 89% 52%;
+    --border: 330 22% 19%;
+    --input: 330 22% 19%;
+    --ring: 330 90% 60%;
 
-    --brand: 199 89% 55%;
-    --brand-2: 217 91% 66%;
+    --brand: 330 92% 62%;
+    --brand-2: 286 88% 68%;
+
+    --scene-1: 187 95% 58%;
+    --scene-2: 160 90% 52%;
   }
 }
 

@@ -59,24 +59,23 @@ export function ApplyTerminal() {
           setJob((prev) =>
             prev.script === DESTROY_SCRIPT
               ? prev
-              : { script: DESTROY_SCRIPT, n: prev.n + 1 },
+              : { script: DESTROY_SCRIPT, n: prev.n + 1 }
           );
         }
       }),
-    [],
+    []
   );
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: `job` is the run trigger — each new job restarts the sequence.
   React.useEffect(() => {
     const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
+      "(prefers-reduced-motion: reduce)"
     ).matches;
     let timer = 0;
 
     const scheduleRebuild = () => {
       timer = window.setTimeout(
         () => setJob((prev) => ({ script: APPLY_SCRIPT, n: prev.n + 1 })),
-        reduced ? 1500 : REBUILD_DELAY_MS,
+        reduced ? 1500 : REBUILD_DELAY_MS
       );
     };
 
@@ -134,7 +133,9 @@ export function ApplyTerminal() {
           }
           aria-label="Replay deployment"
           className={`ml-auto inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[10px] text-brand transition-opacity hover:bg-brand/10 ${
-            done && !destroying ? "opacity-100" : "pointer-events-none opacity-0"
+            done && !destroying
+              ? "opacity-100"
+              : "pointer-events-none opacity-0"
           }`}
         >
           <RotateCcwIcon className="size-3" aria-hidden="true" />

@@ -7,8 +7,8 @@ import {
   type ApplyEvent,
   SCENE_ARCS,
   SCENE_REGIONS,
-  type SceneResource,
   SCENE_RESOURCES,
+  type SceneResource,
 } from "@/data/deployments";
 import { subscribeApply } from "./apply-bus";
 
@@ -118,8 +118,9 @@ function targetPosition(targetId: string): THREE.Vector3 | null {
   if (targetId.startsWith("res:")) {
     const res = SCENE_RESOURCES.find((r) => r.id === targetId);
     if (!res) return null;
-    return regionPosition(res.region)
-      .add(new THREE.Vector3(res.dx, res.h / 2, res.dz));
+    return regionPosition(res.region).add(
+      new THREE.Vector3(res.dx, res.h / 2, res.dz)
+    );
   }
   if (targetId.startsWith("arc:")) {
     const arc = SCENE_ARCS.find((a) => a.id === targetId);
@@ -243,11 +244,7 @@ function GlassPlatform({
           emissiveIntensity={0.7}
         />
       </mesh>
-      <RegionLabel
-        text={label}
-        color={labelColor}
-        position={[0, 0.62, 1.05]}
-      />
+      <RegionLabel text={label} color={labelColor} position={[0, 0.62, 1.05]} />
     </group>
   );
 }
@@ -539,7 +536,7 @@ function Arc({
     return new THREE.QuadraticBezierCurve3(
       from.clone().setY(0.1),
       mid,
-      to.clone().setY(0.1),
+      to.clone().setY(0.1)
     );
   }, [arc]);
 
@@ -628,7 +625,7 @@ function CameraRig() {
           focus.current.until = performance.now() + FOCUS_HOLD_MS;
         }
       }),
-    [],
+    []
   );
 
   useFrame(({ clock }) => {
@@ -644,7 +641,7 @@ function CameraRig() {
     camera.position.set(
       Math.sin(angle) * radius.current,
       6.2,
-      Math.cos(angle) * radius.current,
+      Math.cos(angle) * radius.current
     );
     camera.lookAt(look.current);
   });
@@ -669,7 +666,7 @@ function Topology({ colors }: { colors: ThemeColors }) {
           [event.target]: { t: performance.now(), dir },
         }));
       }),
-    [],
+    []
   );
 
   return (
@@ -739,7 +736,7 @@ export default function InfraScene({
             e.preventDefault();
             onContextLost();
           },
-          { once: true },
+          { once: true }
         );
       }}
       className="!absolute inset-0"

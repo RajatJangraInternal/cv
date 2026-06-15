@@ -14,6 +14,7 @@ import { generateResumeStructuredData } from "@/lib/structured-data";
 import { cn } from "@/lib/utils";
 import { Certifications } from "./components/Certifications";
 import { Education } from "./components/Education";
+import { GlobalFootprint } from "./components/GlobalFootprint";
 import { Header } from "./components/Header";
 import { Hero } from "./components/Hero";
 import { Projects } from "./components/Projects";
@@ -176,6 +177,8 @@ export default function ResumePage() {
             </div>
           </div>
         </section>
+
+        <GlobalFootprint />
 
         <nav className="print:hidden" aria-label="Quick navigation">
           <CommandMenu links={getCommandMenuLinks()} />

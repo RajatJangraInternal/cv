@@ -196,6 +196,12 @@ export const RESUME_DATA: ResumeData = {
       credentialUrl:
         "https://learn.microsoft.com/api/credentials/share/en-us/RajatKumar2653/4793B6BC612E7123?sharingId=CEB12D732975539D",
     },
+    {
+      name: "Microsoft Certified: Machine Learning Operations Engineer Associate",
+      issuer: "Microsoft",
+      date: "2026",
+      credentialUrl: "https://learn.microsoft.com/api/credentials/share/en-us/RajatKumar2653/C7AE070E6FDF61F1?sharingId=CEB12D732975539D",
+    },
   ],
   skills: [
     "Azure",
